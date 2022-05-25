@@ -1,25 +1,47 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react';
+import Grid from '@mui/material/Grid'
+import Header from './Components/Header';
+import Menu from './Components/Menu';
+import { Toolbar } from '@mui/material';
+import { Box } from '@mui/material';
+import { Typography } from '@mui/material';
+import TeamMembers from './Components/TeamMembers';
+import TeamTasks from './Components/TeamTasks';
+import MeetupScheduler from './Components/MeetupScheduler';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+
+var pages = {
+  "My Team Members": <TeamMembers />,
+  "My Team's Tasks": <TeamTasks />,
+  "Meetup Scheduler": <MeetupScheduler />
 }
+
+const App = () => {
+  const [activePageName, setActivePageName] = useState("My Team Members");
+
+  return (
+    <Box>
+      <Header />
+      
+      <Grid container>
+        <Grid item xs>
+          <Menu setActivePageName={setActivePageName}/>
+        </Grid>
+
+        <Grid item xs="7" padding="25px">
+          <Toolbar />
+          {pages[activePageName]}
+        </Grid>
+
+        <Grid item xs="2">
+          { /* This grid item (column) is empty. It merely provides padding.*/ }
+        </Grid>
+      </Grid>
+
+
+
+    </Box>
+  );
+};
 
 export default App;
