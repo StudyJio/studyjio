@@ -15,7 +15,7 @@ const TeamMembers = () => {
             </Typography>
 
             <Grid container spacing={2}>
-                <Grid item> {cardGenerator("Peter", "@petergriffin")} </Grid>
+                <Grid item> {cardGenerator("Peter (You)", "@petergriffin")} </Grid>
                 <Grid item> {cardGenerator("Lois", "@loisloislois")} </Grid>
                 <Grid item> {cardGenerator("Megan", "@meganmegan")} </Grid>
                 <Grid item> {cardGenerator("Brian", "@brianbrain")} </Grid>

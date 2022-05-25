@@ -28,12 +28,12 @@ const App = () => {
           <Menu setActivePageName={setActivePageName}/>
         </Grid>
 
-        <Grid item xs="7" padding="25px">
+        <Grid item xs="8" padding="25px">
           <Toolbar />
           {pages[activePageName]}
         </Grid>
 
-        <Grid item xs="2">
+        <Grid item xs="1">
           { /* This grid item (column) is empty. It merely provides padding.*/ }
         </Grid>
       </Grid>
