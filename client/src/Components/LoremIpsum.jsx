@@ -1,6 +1,6 @@
 import { Typography } from "@mui/material";
 
-const Content = () => {
+const LoremIpsum = () => {
     return (
         <>
             <Typography paragraph>
@@ -26,4 +26,4 @@ const Content = () => {
     );
 }
 
-export default Content;
+export default LoremIpsum;
