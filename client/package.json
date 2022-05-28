@@ -17,8 +17,7 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "_comment": "The value of start was changed from react-scripts start to what it is now for deployment to Heroku.",
-    "start": "node server/server.js",
+    "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
