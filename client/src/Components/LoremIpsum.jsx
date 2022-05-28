@@ -1,6 +1,10 @@
 import { Typography } from "@mui/material";
 
+<<<<<<< HEAD
 const Content = () => {
+=======
+const LoremIpsum = () => {
+>>>>>>> parent of 0da1c28 (Added dummy login screen)
     return (
         <>
             <Typography paragraph>
@@ -26,4 +30,8 @@ const Content = () => {
     );
 }
 
+<<<<<<< HEAD
 export default Content;
+=======
+export default LoremIpsum;
+>>>>>>> parent of 0da1c28 (Added dummy login screen)
