@@ -1,47 +1,24 @@
-import React, { useState } from 'react';
-import Grid from '@mui/material/Grid'
-import Header from './Components/Header';
-import Menu from './Components/Menu';
-import { Toolbar } from '@mui/material';
-import { Box } from '@mui/material';
-import { Typography } from '@mui/material';
-import TeamMembers from './Components/TeamMembers';
-import TeamTasks from './Components/TeamTasks';
-import MeetupScheduler from './Components/MeetupScheduler';
+import './index.css'
+import { useState, useEffect } from 'react'
+import { supabase } from './supabaseClient'
+import Auth from './Components/Auth'
+import Dashboard from './Components/Dashboard'
+import { Box } from '@mui/material'
 
+export default function App() {
+  const [session, setSession] = useState(null)
 
-var pages = {
-  "My Team Members": <TeamMembers />,
-  "My Team's Tasks": <TeamTasks />,
-  "Meetup Scheduler": <MeetupScheduler />
-}
+  useEffect(() => {
+    setSession(supabase.auth.session())
 
-const App = () => {
-  const [activePageName, setActivePageName] = useState("My Team Members");
+    supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session)
+    })
+  }, [])
 
   return (
     <Box>
-      <Header />
-      
-      <Grid container>
-        <Grid item xs>
-          <Menu setActivePageName={setActivePageName}/>
-        </Grid>
-
-        <Grid item xs="8" padding="25px">
-          <Toolbar />
-          {pages[activePageName]}
-        </Grid>
-
-        <Grid item xs="1">
-          { /* This grid item (column) is empty. It merely provides padding.*/ }
-        </Grid>
-      </Grid>
-
-
-
+      {!session ? <Auth setSession={setSession} /> : <Dashboard />}
     </Box>
-  );
-};
-
-export default App;
+  )
+}
