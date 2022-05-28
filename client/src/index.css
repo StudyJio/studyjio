@@ -19,3 +19,8 @@ code {
   box-sizing: border-box;
   font-family: "Roboto";
 } */
+
+appBar {
+  position: 'relative',
+  zIndex: theme.zIndex.drawer + 1;
+}

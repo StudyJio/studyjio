@@ -14,7 +14,6 @@ import AddIcon from '@mui/icons-material/Add';
 import EditRoundedIcon from '@mui/icons-material/EditRounded';
 import DeleteRoundedIcon from '@mui/icons-material/DeleteRounded';
 import { useState } from "react";
-import { Button } from "@mui/material";
 
 function getTeamMemberNames() {
     // For now, we assume that all teams have five members.
@@ -54,12 +53,6 @@ function TeamTasks() {
                 My Team's Tasks
             </Typography>
 
-            <Box>
-                <Button variant="contained" sx={{margin: "5px"}}> CS2030S </Button>
-                <Button variant="outlined" sx={{margin: "5px"}}> CS2040S </Button>
-                <Button variant="outlined" sx={{margin: "5px"}}> CS2050S </Button>
-            </Box>
-
             <TableContainer component={Paper}>
                 <Table>
                     <TableHead>
@@ -70,8 +63,8 @@ function TeamTasks() {
                         <TableCell align="center"> {getTeamMemberNames()[2]} </TableCell>
                         <TableCell align="center"> {getTeamMemberNames()[3]} </TableCell>
                         <TableCell align="center"> {getTeamMemberNames()[4]} </TableCell>
-                        <TableCell> </TableCell> { /* A column of 'Edit' icons. */ }
-                        <TableCell> </TableCell> { /* A column of 'Delete' icons. */ }
+                        <TableCell> </TableCell>
+                        <TableCell> </TableCell>
                     </TableHead>
 
                     <TableBody>
