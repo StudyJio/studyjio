@@ -2,7 +2,9 @@ import { Drawer, List, ListItem, ListItemButton, ListItemIcon, Toolbar } from "@
 import GroupsRoundedIcon from '@mui/icons-material/GroupsRounded';
 import AssignmentRoundedIcon from '@mui/icons-material/AssignmentRounded';
 import CalendarMonthRoundedIcon from '@mui/icons-material/CalendarMonthRounded';
+import PsychologyRoundedIcon from '@mui/icons-material/PsychologyRounded';
 import { ListItemText } from "@mui/material";
+import { Divider } from "@mui/material";
 
 
 
@@ -35,6 +37,16 @@ const Menu = props => {
                         <ListItemText primary="Meetup Scheduler" />
                     </ListItemButton>
                 </ListItem>
+
+                <Divider />
+                
+                <ListItem key={"Team Preferences"} onClick={() => props.setActivePageName("Team Preferences")}>
+                    <ListItemButton>
+                        <ListItemIcon> <PsychologyRoundedIcon /> </ListItemIcon>
+                        <ListItemText primary="Team Preferences" />
+                    </ListItemButton>
+                </ListItem>
+
             </List>
 
 

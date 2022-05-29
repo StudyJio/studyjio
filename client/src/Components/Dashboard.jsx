@@ -7,11 +7,13 @@ import { Box } from '@mui/material';
 import TeamMembers from './TeamMembers';
 import TeamTasks from './TeamTasks';
 import MeetupScheduler from './MeetupScheduler';
+import TeamPreferences from './TeamPreferences';
 
 var pages = {
   "My Team Members": <TeamMembers />,
   "My Team's Tasks": <TeamTasks />,
-  "Meetup Scheduler": <MeetupScheduler />
+  "Meetup Scheduler": <MeetupScheduler />,
+  "Team Preferences": <TeamPreferences />
 }
 
 const Dashboard = () => {
