@@ -35,7 +35,7 @@ export default function Auth(props) {
 
         <Grid item xs="6">
 
-            <Typography variant="h4" sx={{margin: "10px"}}> Sign in </Typography>
+            <Typography variant="h4" sx={{marginTop: "120px"}}> Sign in </Typography>
                     
             <Box component="form" sx={{flexDirection: 'row'}}>
 
@@ -76,6 +76,11 @@ export default function Auth(props) {
             >
                 Magical Admin Log In Button
             </Button>
+
+            <Typography sx={{marginTop: "20px"}}>
+                The demo version of our web app is best experienced on wide screens.
+            </Typography>
+
         </Grid>
 
         <Grid item xs="3"> </Grid>

@@ -12,7 +12,7 @@ const Header = () => {
                 <Typography flex="1"> { /* This pushes the User Account icon to the right side of the screen. */ }
                       StudyJio
                 </Typography>
-                <AccountCircleOutlinedIcon />
+                <AccountCircleOutlinedIcon onClick={() => alert("This would open a drop-down menu with a 'Log out' button that returns the user to the login page.")}/>
             </Toolbar>
         </AppBar>
     );

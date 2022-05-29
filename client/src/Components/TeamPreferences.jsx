@@ -6,6 +6,7 @@ import { FormLabel } from "@mui/material";
 import { RadioGroup } from "@mui/material";
 import { FormControlLabel } from "@mui/material";
 import { Radio } from "@mui/material";
+import { Button } from "@mui/material";
 
 const TeamPreferences = () => {
     return (
@@ -22,7 +23,7 @@ const TeamPreferences = () => {
                 (The following question is a dummy question.)
             </Typography>
 
-            <Paper sx={{padding: "20px"}}>
+            <Paper sx={{marginTop: "20px", padding: "20px"}}>
                 <FormControl>
                     <FormLabel id="personality"> I study the best when I wear... </FormLabel>
                     <RadioGroup>
@@ -40,6 +41,8 @@ const TeamPreferences = () => {
                     </RadioGroup>
                 </FormControl>
             </Paper>
+
+            <Button variant="contained" onClick={() => alert("We have not yet implemented saving these preferences into the database.")} sx={{marginTop: "20px"}}> Save </Button>
         </div>
     );
 };

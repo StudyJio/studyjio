@@ -14,6 +14,10 @@ const TeamMembers = () => {
                 My Team Members
             </Typography>
 
+            <Typography gutterBottom>
+                In this prototype, we assume that the matching process is already complete.
+            </Typography>
+
             <Grid container spacing={2}>
                 <Grid item> {cardGenerator("Peter (You)", "@petergriffin")} </Grid>
                 <Grid item> {cardGenerator("Lois", "@loisloislois")} </Grid>
