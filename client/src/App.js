@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { supabase } from './supabaseClient'
-import Auth from './Components/Auth'
+import SignedOutPage from './Components/SignedOutPage'
 import Dashboard from './Components/Dashboard'
 import { Box } from '@mui/material'
 
@@ -17,7 +17,7 @@ export default function App() {
 
   return (
     <Box>
-      {!session ? <Auth setSession={setSession} /> : <Dashboard />}
+      {!session ? <SignedOutPage setSession={setSession} /> : <Dashboard />}
     </Box>
   )
 }

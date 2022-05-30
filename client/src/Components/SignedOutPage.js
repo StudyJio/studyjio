@@ -1,17 +1,20 @@
 import { Typography } from '@mui/material'
 import { TextField } from '@mui/material'
 import { Button } from '@mui/material'
+import { Card } from '@mui/material'
 import { Grid } from '@mui/material'
 import { Box } from '@mui/material'
 import { useState } from 'react'
 import { supabase } from '../supabaseClient'
+import SignInCard from './SignInCard'
+import SignUpCard from './SignUpCard'
 
 export default function Auth(props) {
   const [loading, setLoading] = useState(false)
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
-  async function handleLogin(e) {
+  async function SignedOutPage(e) {
         e.preventDefault()
 
         try {
@@ -35,9 +38,22 @@ export default function Auth(props) {
 
         <Grid item xs="6">
 
-            <Typography variant="h4" sx={{marginTop: "120px"}}> Sign in </Typography>
+            <Typography variant="h3" sx={{marginTop: "120px"}}> Studyjio </Typography>
                     
-            <Box component="form" sx={{flexDirection: 'row'}}>
+            <SignInCard />
+
+            <SignUpCard />
+
+            <Button
+                variant="contained"
+                onClick={() => props.setSession(true)}
+                sx={{display: 'inline', margin: '10px'}}   
+            >
+                Magical Admin Log In Button
+            </Button>
+
+            
+            {/* <Box component="form" sx={{flexDirection: 'row'}}>
 
                 <TextField
                     required
@@ -67,15 +83,7 @@ export default function Auth(props) {
                 // onClick={() => handleLogin()}
             >
                 Log in
-            </Button>
-
-            <Button
-                variant="contained"
-                onClick={() => props.setSession(true)}
-                sx={{display: 'inline', margin: '10px'}}   
-            >
-                Magical Admin Log In Button
-            </Button>
+            </Button> */}
 
             <Typography sx={{marginTop: "20px"}}>
                 The demo version of our web app is best experienced on wide screens.
