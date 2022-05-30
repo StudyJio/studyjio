@@ -42,7 +42,7 @@ export default function Auth(props) {
                     
             <LoginCard />
 
-            <SignUpCard />
+            {/* <SignUpCard /> */}
 
             <Button
                 variant="contained"
@@ -52,38 +52,10 @@ export default function Auth(props) {
                 Magical Admin Log In Button
             </Button>
 
-            
-            {/* <Box component="form" sx={{flexDirection: 'row'}}>
+            <Typography>
+                We have not yet implemented the registration feature. In the meantime, try logging in with email "test1@gmail.com" and password "testing".
+            </Typography>
 
-                <TextField
-                    required
-                    fullWidth
-                    label="Email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    sx={{display: 'block', margin: '10px'}}
-                />
-
-                <TextField
-                    required
-                    fullWidth
-                    type="password"
-                    label="Password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    sx={{display: 'block', margin: '10px'}}
-                />
-
-            </Box>
-
-            <Button
-                variant="contained"
-                onClick={() => alert("lol, your password is " + password)}
-                sx={{display: 'inline', margin: '10px'}}
-                // onClick={() => handleLogin()}
-            >
-                Log in
-            </Button> */}
 
             <Typography sx={{marginTop: "20px"}}>
                 The demo version of our web app is best experienced on wide screens.

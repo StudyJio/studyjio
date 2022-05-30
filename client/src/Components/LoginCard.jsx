@@ -25,12 +25,11 @@ export default function LoginCard() {
         const email = emailRef.current.value;
         const password = passwordRef.current.value;
 
-        const {error} = await signIn({email, password});
+        const {user, session, error} = await signIn({email, password});
 
         if (error) {
             setError(error);
-        } else {
-            setError(30);
+            alert("Wrong password!");
         }
 
     }
@@ -38,10 +37,6 @@ export default function LoginCard() {
     return (
         <Card>
             <Typography variant="h4"> Log In </Typography>
-
-            <Typography> {error ? "Invalid or missing login credentials." : "Logged in successfully."}
-            
-            </Typography>
 
             <TextField
                     required

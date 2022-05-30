@@ -31,7 +31,7 @@ export default function SignUpCard() {
                 sx={{display: 'inline', margin: '10px'}}
                 // onClick={() => handleLogin()}
             >
-                Log in
+                Sign Up
             </Button>
 
         </Card>
