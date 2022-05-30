@@ -5,6 +5,7 @@ import { Card } from "@mui/material";
 
 import { useRef, useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
+import { supabase } from "../supabase";
 import { useAuth } from './Contexts/Auth'
 
 export default function LoginCard() {
@@ -12,18 +13,40 @@ export default function LoginCard() {
     const emailRef = useRef()
     const passwordRef = useRef()
   
-    const [error, setError] = useState(null)
-    const { signIn } = useAuth();
+    const [error, setError] = useState(true)
+
+    function signIn(data) {
+        return supabase.auth.signIn(data);
+    }
+
+    async function handleSubmit(e) {
+        e.preventDefault();
+
+        const email = emailRef.current.value;
+        const password = passwordRef.current.value;
+
+        const {error} = await signIn({email, password});
+
+        if (error) {
+            setError(error);
+        } else {
+            setError(30);
+        }
+
+    }
 
     return (
         <Card>
             <Typography variant="h4"> Log In </Typography>
 
+            <Typography> {error ? "Invalid or missing login credentials." : "Logged in successfully."}
+            
+            </Typography>
+
             <TextField
                     required
                     label="Email"
-                    // value={email}
-                    // onChange={(e) => setEmail(e.target.value)}
+                    inputRef={emailRef}
                     sx={{display: 'block', margin: '10px'}}
                 />
 
@@ -31,8 +54,7 @@ export default function LoginCard() {
                 required
                 type="password"
                 label="Password"
-                // value={password}
-                // onChange={(e) => setPassword(e.target.value)}
+                inputRef={passwordRef}
                 sx={{display: 'block', margin: '10px'}}
             />
 
@@ -40,7 +62,7 @@ export default function LoginCard() {
                 variant="contained"
                 // onClick={() => alert("lol, your password is " + password)}
                 sx={{display: 'inline', margin: '10px'}}
-                // onClick={() => handleLogin()}
+                onClick={handleSubmit}
             >
                 Log in
             </Button>
