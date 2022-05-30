@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { supabase } from './supabaseClient'
+import { supabase } from './supabase'
 import SignedOutPage from './Components/SignedOutPage'
 import Dashboard from './Components/Dashboard'
 import { Box } from '@mui/material'

@@ -5,8 +5,8 @@ import { Card } from '@mui/material'
 import { Grid } from '@mui/material'
 import { Box } from '@mui/material'
 import { useState } from 'react'
-import { supabase } from '../supabaseClient'
-import SignInCard from './SignInCard'
+import { supabase } from '../supabase'
+import LoginCard from './LoginCard'
 import SignUpCard from './SignUpCard'
 
 export default function Auth(props) {
@@ -40,7 +40,7 @@ export default function Auth(props) {
 
             <Typography variant="h3" sx={{marginTop: "120px"}}> Studyjio </Typography>
                     
-            <SignInCard />
+            <LoginCard />
 
             <SignUpCard />
 
