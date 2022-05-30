@@ -38,7 +38,7 @@ export default function Auth(props) {
 
         <Grid item xs="6">
 
-            <Typography variant="h3" sx={{marginTop: "120px"}}> Studyjio </Typography>
+            <Typography variant="h3" sx={{marginTop: "120px"}}> StudyJio </Typography>
                     
             <LoginCard />
 
