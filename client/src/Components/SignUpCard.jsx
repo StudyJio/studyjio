@@ -3,16 +3,46 @@ import { Button } from "@mui/material";
 import { Card } from "@mui/material";
 import { Typography } from "@mui/material";
 
+import { useRef, useState } from 'react'
+import { supabase } from "../supabase";
+
+
 export default function SignUpCard() {
-    return (
+
+    const emailRef = useRef();
+    const passwordRef = useRef();
+    const confirmPasswordRef = useRef();
+
+    const [error, setError] = useState(true);
+
+    function signUp(data) {
+        return supabase.auth.signUp(data);
+    }
+
+    async function handleSubmit(e) {
+        e.preventDefault();
+
+        // Check that the 'Confirm Password' entered matches the 'Password' entered.
+        if (passwordRef.current.value !== confirmPasswordRef.current.value) {
+            alert("Passwords do not match!")
+            return;
+        }
+
+        const email = emailRef.current.value;       // a String
+        const password = passwordRef.current.value; // a String
+
+        const res = await signUp({email, password});
+
+    }
+
+    return (    
         <Card>
             <Typography variant="h4"> Sign Up </Typography>
         
             <TextField
                 required
                 label="Email"
-                // value={email}
-                // onChange={(e) => setEmail(e.target.value)}
+                inputRef={emailRef}
                 sx={{display: 'block', margin: '10px'}}
             />
 
@@ -20,16 +50,22 @@ export default function SignUpCard() {
                 required
                 type="password"
                 label="Password"
-                // value={password}
-                // onChange={(e) => setPassword(e.target.value)}
+                inputRef={passwordRef}
+                sx={{display: 'block', margin: '10px'}}
+            />
+
+            <TextField
+                required
+                type="password"
+                label="Confirm Password"
+                inputRef={confirmPasswordRef}
                 sx={{display: 'block', margin: '10px'}}
             />
 
             <Button
                 variant="contained"
-                // onClick={() => alert("lol, your password is " + password)}
                 sx={{display: 'inline', margin: '10px'}}
-                // onClick={() => handleLogin()}
+                onClick={handleSubmit}
             >
                 Sign Up
             </Button>

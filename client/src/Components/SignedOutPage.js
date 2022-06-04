@@ -42,7 +42,7 @@ export default function Auth(props) {
                     
             <LoginCard />
 
-            {/* <SignUpCard /> */}
+            <SignUpCard />
 
             <Button
                 variant="contained"
