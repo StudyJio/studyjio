@@ -36,32 +36,31 @@ export default function LoginCard() {
     }
 
     return (
-        <Card>
-            <Typography variant="h4"> Log In </Typography>
+        <Card sx={{p: 3, mr: 1}}>
+            <Typography variant="h4" sx={{pb: 1}}> Log In </Typography>
 
             <TextField
                     required
                     label="Email"
                     inputRef={emailRef}
-                    sx={{display: 'block', margin: '10px'}}
-                />
+                    sx={{display: 'block', py: 1}}
+            />
 
             <TextField
                 required
                 type="password"
                 label="Password"
                 inputRef={passwordRef}
-                sx={{display: 'block', margin: '10px'}}
+                sx={{display: 'block', py: 1}}
             />
 
             <Button
                 variant="contained"
-                sx={{display: 'inline', margin: '10px'}}
+                sx={{display: 'block'}}
                 onClick={handleSubmit}
             >
                 Log in
             </Button>
-
         </Card>
     )
 }

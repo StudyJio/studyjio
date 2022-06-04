@@ -38,29 +38,25 @@ export default function Auth(props) {
 
         <Grid item xs="6">
 
-            <Typography variant="h3" sx={{marginTop: "120px"}}> StudyJio </Typography>
-                    
-            <LoginCard />
-
-            <SignUpCard />
+            <Typography variant="h3" sx={{marginTop: "60px"}}> StudyJio </Typography>
+            
+            <Typography sx={{py: 2}}>
+                The demo version of our web app is best experienced on wide screens.
+            </Typography>
+            
+            <Grid container>
+                <Grid item xs="6"> <LoginCard /> </Grid>
+                <Grid item xs="6"> <SignUpCard /> </Grid>
+            </Grid>
 
             <Button
                 variant="contained"
                 onClick={() => props.setSession(true)}
-                sx={{display: 'inline', margin: '10px'}}   
+                sx={{display: 'inline', my: 3}}   
             >
                 Magical Admin Log In Button
             </Button>
-
-            <Typography>
-                We have not yet implemented the registration feature. In the meantime, try logging in with email "test1@gmail.com" and password "testing".
-            </Typography>
-
-
-            <Typography sx={{marginTop: "20px"}}>
-                The demo version of our web app is best experienced on wide screens.
-            </Typography>
-
+            
         </Grid>
 
         <Grid item xs="3"> </Grid>
