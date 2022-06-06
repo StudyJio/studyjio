@@ -2,7 +2,6 @@ import { Toolbar, AppBar } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import React, { useState } from "react";
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
-import { withStyles } from "@mui/material";
 import { Menu } from "@mui/material";
 import { MenuItem } from "@mui/material";
 import { supabase } from "../supabase";
