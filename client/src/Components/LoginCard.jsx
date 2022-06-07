@@ -36,11 +36,13 @@ export default function LoginCard() {
     }
 
     return (
-        <Card sx={{p: 3, mr: 1}}>
+        <Card sx={{p: 3, mb: 3}}>
+            
             <Typography variant="h4" sx={{pb: 1}}> Log In </Typography>
 
             <TextField
                     required
+                    fullWidth
                     label="Email"
                     inputRef={emailRef}
                     sx={{display: 'block', py: 1}}
@@ -48,6 +50,7 @@ export default function LoginCard() {
 
             <TextField
                 required
+                fullWidth
                 type="password"
                 label="Password"
                 inputRef={passwordRef}
