@@ -37,12 +37,15 @@ function Header(props) {
             <Toolbar>
 
                 {/* A menu button that appears only on narrow screens. */}
-                <IconButton onClick={props.handleToggleMobileDrawer}>
-                    <MenuRoundedIcon sx={{ color: 'white', display: { sm: 'none' } }}/>
+                <IconButton>
+                    <MenuRoundedIcon
+                        sx={{ color: 'white', display: { sm: 'none' }, mr: '5px' }}
+                        onClick={props.handleToggleMobileDrawer}
+                    />
                 </IconButton>
                 
 
-                <Typography flex="1" sx={{ ml: '5px'}}> {/* This pushes the User Account icon to the right side of the screen. */}
+                <Typography flex="1"> {/* This pushes the User Account icon to the right side of the screen. */}
                     StudyJio
                 </Typography>
 

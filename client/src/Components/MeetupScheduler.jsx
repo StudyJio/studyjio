@@ -93,7 +93,7 @@ const MeetupScheduler = () => {
                 Meetup Scheduler
             </Typography>
 
-            <FormControl>
+            <FormControl sx={{pb: 2}}>
                 <InputLabel id="week-selector">Week</InputLabel>
                 <Select
                     id = "week-selector"
