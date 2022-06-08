@@ -1,4 +1,4 @@
-import { Drawer, List, ListItem, ListItemButton, ListItemIcon, Toolbar } from "@mui/material";
+import { List, ListItem, ListItemButton, ListItemIcon, Toolbar } from "@mui/material";
 import GroupsRoundedIcon from '@mui/icons-material/GroupsRounded';
 import AssignmentRoundedIcon from '@mui/icons-material/AssignmentRounded';
 import CalendarMonthRoundedIcon from '@mui/icons-material/CalendarMonthRounded';
@@ -6,14 +6,9 @@ import PsychologyRoundedIcon from '@mui/icons-material/PsychologyRounded';
 import { ListItemText } from "@mui/material";
 import { Divider } from "@mui/material";
 
-
-
-
-const Menu = props => {
-
+function DrawerContents(props) {
     return (
-        <Drawer variant="permanent" anchor="left">
-
+        <>
             <Toolbar /> {/* Add spacing to prevent the "My Team Members" button from being blocked by the AppBar. */}
             
             <List>
@@ -39,7 +34,7 @@ const Menu = props => {
                 </ListItem>
 
                 <Divider />
-                
+
                 <ListItem key={"Team Preferences"} onClick={() => props.setActivePageName("Team Preferences")}>
                     <ListItemButton>
                         <ListItemIcon> <PsychologyRoundedIcon /> </ListItemIcon>
@@ -48,10 +43,8 @@ const Menu = props => {
                 </ListItem>
 
             </List>
-
-
-        </Drawer>
+        </> 
     );
 }
 
-export default Menu;
+export default DrawerContents;

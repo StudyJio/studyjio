@@ -2,11 +2,13 @@ import { Toolbar, AppBar } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import React, { useState } from "react";
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
+import MenuRoundedIcon from '@mui/icons-material/MenuRounded';
 import { Menu } from "@mui/material";
 import { MenuItem } from "@mui/material";
 import { supabase } from "../supabase";
+import { IconButton } from "@mui/material";
 
-const Header = () => {
+function Header(props) {
 
     // The element (El) to which the floating 'Sign Out' menu is anchored.
     const [anchorEl, setAnchorEl] = useState(null);
@@ -31,13 +33,21 @@ const Header = () => {
     }
 
     return (
-        <AppBar sx={{zIndex: theme => theme.zIndex.drawer + 1}}> { /* The AppBar at the top of the screen should cover the Drawer on the left. */ }
+        <AppBar sx={{ zIndex: theme => theme.zIndex.drawer + 1 }}> {/* The AppBar at the top of the screen should cover the Drawer on the left. */}
             <Toolbar>
-                <Typography flex="1"> { /* This pushes the User Account icon to the right side of the screen. */ }
-                      StudyJio
+
+                {/* A menu button that appears only on narrow screens. */}
+                <IconButton onClick={props.handleToggleMobileDrawer}>
+                    <MenuRoundedIcon sx={{ color: 'white', display: { sm: 'none' } }}/>
+                </IconButton>
+                
+
+                <Typography flex="1" sx={{ ml: '5px'}}> {/* This pushes the User Account icon to the right side of the screen. */}
+                    StudyJio
                 </Typography>
 
-                <AccountCircleOutlinedIcon onClick={handleClick}/>
+
+                <AccountCircleOutlinedIcon onClick={handleClick} />
                 <Menu
                     anchorEl={anchorEl}
                     open={open}
@@ -48,6 +58,6 @@ const Header = () => {
             </Toolbar>
         </AppBar>
     );
-};
+}
 
 export default Header;
