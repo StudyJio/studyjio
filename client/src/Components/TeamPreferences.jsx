@@ -10,31 +10,76 @@ import { Button } from "@mui/material";
 import { Step, StepLabel, Stepper } from "@mui/material";
 import { useState } from "react";
 import { TextField } from "@mui/material";
+import { Link } from "@mui/material";
+import { Grid } from "@mui/material";
+import { Slider } from "@mui/material";
+import { withStyles } from "@mui/material";
 
 const MyModules = (
     <>
-        <Typography variant="h5">
+        <Typography variant="h5" sx={{mb: 1}}>
             My Modules
         </Typography>
 
         <TextField
             fullWidth
             multiline
-            placeholder={"Module codes separated by line breaks"}>
+            placeholder={"Full module codes separated by line breaks"}>
 
         </TextField>
     </>
 );
 
+function StudyingPersonalityColumnGenerator(leftLabel, rightLabel) {
+
+    const marks = [
+        { value: -11, label: leftLabel },
+        { value: 11, label: rightLabel },
+    ];
+
+    // sx={{mx: 2}} behaves goofily within a Slider, so I had to uglyly wrap it in a Box.
+
+    return (
+        <Box sx={{mx: 4, my: 2}}>
+            <Slider
+                defaultValue={1}
+                step={2}
+                marks={marks}
+                min={-11}
+                max={11}
+                valueLabelDisplay="auto"
+                valueLabelFormat={(v) => Math.abs(v)}
+                track={false}
+                sx={{}}
+            >
+            </Slider>
+        </Box>
+
+    );
+
+}
+
 const MyStudyingPersonality = (
     <>
-        <Typography variant="h5">
+        <Typography variant="h5" sx={{mb: 1}}>
             My Studying Personality
         </Typography>
 
-        <Typography>
-            Please visit this website to find out your studying personality...
+        <Typography sx={{mb: 5}}>
+            Please visit <Link href="https://www.webtools.ncsu.edu/learningstyles/">this website</Link> to find out your studying personality through a quick five-minute questionnaire.
         </Typography>
+
+        <Typography variant="h6">
+            Enter your results
+        </Typography>
+
+        {StudyingPersonalityColumnGenerator("Active", "Reflective")}
+
+        {StudyingPersonalityColumnGenerator("Sensing", "Intuitive")}
+
+        {StudyingPersonalityColumnGenerator("Visual", "Verbal")}
+
+        {StudyingPersonalityColumnGenerator("Sequential", "Global")}
     </>
 );
 
