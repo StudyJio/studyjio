@@ -7,44 +7,124 @@ import { RadioGroup } from "@mui/material";
 import { FormControlLabel } from "@mui/material";
 import { Radio } from "@mui/material";
 import { Button } from "@mui/material";
+import { Step, StepLabel, Stepper } from "@mui/material";
+import { useState } from "react";
+import { TextField } from "@mui/material";
 
-const TeamPreferences = () => {
+const MyModules = (
+    <>
+        <Typography variant="h5">
+            My Modules
+        </Typography>
+
+        <TextField
+            fullWidth
+            multiline
+            placeholder={"Module codes separated by line breaks"}>
+
+        </TextField>
+    </>
+);
+
+const MyStudyingPersonality = (
+    <>
+        <Typography variant="h5">
+            My Studying Personality
+        </Typography>
+
+        <Typography>
+            Please visit this website to find out your studying personality...
+        </Typography>
+    </>
+);
+
+const MyLocation = (
+    <>
+        <Typography variant="h5">
+            My Location
+        </Typography>
+
+        <Typography>
+            Please enter your location...
+        </Typography>
+    </>
+);
+
+const pages = [MyModules, MyStudyingPersonality, MyLocation];
+
+function TeamPreferences() {
+
+    const steps = ["My modules",
+        "My studying personality",
+        "My location"];
+
+    // Step one (index 0) is first displayed to the user.
+    const [activeStep, setActiveStep] = useState(0);
+
+    function handleClickBackButton() {
+        setActiveStep(activeStep - 1);
+    }
+
+    function handleClickNextSaveButton() {
+        if (activeStep === 2) {
+            saveTeamPreferencesToServer();
+        } else {
+            setActiveStep(activeStep + 1);
+        }
+    }
+
+    function saveTeamPreferencesToServer() {
+        // TODO
+    }
+
     return (
-        <div>
+        <>
             <Typography variant="h4" gutterBottom>
                 My Team Preferences
             </Typography>
-            
+
             <Typography gutterBottom>
                 Your new preferences will take effect in the next round of matching.
             </Typography>
 
-            <Typography gutterBottom>
-                (The following question is a dummy question.)
-            </Typography>
+            <Stepper activeStep={activeStep} alternativeLabel sx={{ mt: 3 }}>
 
-            <Paper sx={{marginTop: "20px", padding: "20px"}}>
-                <FormControl>
-                    <FormLabel id="personality"> I study the best when I wear... </FormLabel>
-                    <RadioGroup>
-                        <FormControlLabel
-                            value="red"
-                            control={<Radio />}
-                            label="a red shirt."
-                        />
+                {/* For each step, display a step. */}
+                {steps.map((label, index) => {
+                    const stepProps = {}; // Keeps track of whether this step is completed.
+                    return (
+                        <Step key={label} {...stepProps}>
+                            <StepLabel> {label} </StepLabel>
+                        </Step>
+                    );
+                })}
 
-                        <FormControlLabel
-                            value="blue"
-                            control={<Radio />}
-                            label="a blue shirt."
-                        />
-                    </RadioGroup>
-                </FormControl>
+            </Stepper>
+
+            <Paper sx={{ mt: 2, p: 2 }}>
+                {pages[activeStep]}
             </Paper>
 
-            <Button variant="contained" onClick={() => alert("We have not yet implemented saving these preferences into the database.")} sx={{marginTop: "20px"}}> Save </Button>
-        </div>
+            {/* A button that is hidden for the first step, and displays "BACK" for all other steps. */}
+            <Button
+                variant="outlined"
+                sx={{ mt: 2 }}
+                onClick={handleClickBackButton}
+            >
+                HIDDEN/BACK
+            </Button>
+
+            {/* A button that displays "NEXT" for the first two steps, and "SAVE" for the last step. */}
+            <Button
+                variant="contained"
+                sx={{ mt: 2, ml: 2 }}
+                onClick={handleClickNextSaveButton}
+            >
+                NEXT/SAVE
+            </Button>
+
+        </>
     );
-};
+}
 
 export default TeamPreferences;
