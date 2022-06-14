@@ -62,7 +62,7 @@ export default function Auth(props) {
                     The demo version of our web app is best experienced on wide screens.
                 </Typography>
 
-                <Box sx={{ display: {xs: 'block', md: 'none'}}}>
+                <Box sx={{ display: {xs: 'block', md: 'none'}}}> 
                     <LoginAboveSignUp />
                 </Box>
 

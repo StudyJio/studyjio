@@ -4,9 +4,7 @@ import { Button } from "@mui/material";
 import { Card } from "@mui/material";
 
 import { useRef, useState } from 'react'
-import { useNavigate, Link } from 'react-router-dom'
 import { supabase } from "../supabase";
-import { useAuth } from './Contexts/Auth'
 
 export default function LoginCard() {
     
