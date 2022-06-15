@@ -8,17 +8,19 @@ import MeetupScheduler from './MeetupScheduler';
 import TeamPreferences from './TeamPreferences';
 import DrawerContents from './DrawerContents';
 import { Drawer } from '@mui/material';
+import MyAccount from './MyAccount';
 
 var pages = {
   "My Team Members": <TeamMembers />,
   "My Team's Tasks": <TeamTasks />,
   "Meetup Scheduler": <MeetupScheduler />,
-  "Team Preferences": <TeamPreferences />
+  "Team Preferences": <TeamPreferences />,
+  "My Account": <MyAccount />
 }
 
 const SignedInPage = () => {
 
-  const [activePageName, setActivePageName] = useState("Team Preferences"); // TODO: Change this back to "My Team Members".
+  const [activePageName, setActivePageName] = useState("My Team Members");
   // By default, users will first see the "My Team Members" page.
 
   const drawerWidth = 270;

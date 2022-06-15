@@ -3,6 +3,7 @@ import GroupsRoundedIcon from '@mui/icons-material/GroupsRounded';
 import AssignmentRoundedIcon from '@mui/icons-material/AssignmentRounded';
 import CalendarMonthRoundedIcon from '@mui/icons-material/CalendarMonthRounded';
 import PsychologyRoundedIcon from '@mui/icons-material/PsychologyRounded';
+import AccountCircleRoundedIcon from '@mui/icons-material/AccountCircleRounded';
 import { ListItemText } from "@mui/material";
 import { Divider } from "@mui/material";
 
@@ -39,6 +40,15 @@ function DrawerContents(props) {
                     <ListItemButton>
                         <ListItemIcon> <PsychologyRoundedIcon /> </ListItemIcon>
                         <ListItemText primary="Team Preferences" />
+                    </ListItemButton>
+                </ListItem>
+
+                <Divider />
+
+                <ListItem key={"My Account"} onClick={() => props.setActivePageName("My Account")}>
+                    <ListItemButton>
+                        <ListItemIcon> <AccountCircleRoundedIcon /> </ListItemIcon>
+                        <ListItemText primary="My Account" />
                     </ListItemButton>
                 </ListItem>
 
