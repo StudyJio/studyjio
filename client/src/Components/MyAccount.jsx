@@ -1,7 +1,9 @@
 import { Button } from "@mui/material";
 import { TextField } from "@mui/material";
+import { Avatar } from "@mui/material";
 import { Paper } from "@mui/material";
 import { Typography } from "@mui/material";
+import { Box } from "@mui/system";
 
 export default function MyAccount() {
     return (
@@ -10,21 +12,28 @@ export default function MyAccount() {
 
             <Paper sx={{my: 2, p: 2, width: 300}}>
 
-                <img
-                    src="./DefaultProfilePhoto.jpg"
-                    alt="Profile"
-                    width="128px"
-                    height="128px"
-                    object-fit="cover"
-                    border-radius="50%"
-                />
+                <Box display="flex" justifyContent="center">
+                    <Avatar
+                        src="./DefaultProfilePhoto.jpg"
+                        style={{width: 150, height: 150}}
+                        onClick={() => alert("This would open a dialog for selecting a new display photo.")}
+                    />
+                </Box>
+                
+                
 
                 <TextField
                     fullWidth
                     defaultValue={"Ben Awad"}
-                    sx={{display: 'block', mb: 1}}
+                    sx={{display: 'block',
+                         my: 1,
+                         input: {textAlign: "center"}}
+                       }
 
                 />
+
+                
+
             </Paper>
 
             <Paper sx={{my: 2, p: 2, width: 300}}>
@@ -55,7 +64,7 @@ export default function MyAccount() {
 
             </Paper>
 
-            <Button variant="outlined">Sign Out</Button>
+            <Button variant="contained">Sign Out</Button>
         </>
     )
 }
