@@ -18,7 +18,7 @@ var pages = {
 
 const SignedInPage = () => {
 
-  const [activePageName, setActivePageName] = useState("My Team Members");
+  const [activePageName, setActivePageName] = useState("Team Preferences"); // TODO: Change this back to "My Team Members".
   // By default, users will first see the "My Team Members" page.
 
   const drawerWidth = 270;
@@ -50,7 +50,7 @@ const SignedInPage = () => {
             display: { xs: 'block', sm: 'none'},
             '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
           }}>
-            <DrawerContents setActivePageName={setActivePageName} />
+            <DrawerContents setActivePageName={setActivePageName} setIsMobileDrawerOpen={setIsMobileDrawerOpen} handleToggleMobileDrawer={handleToggleMobileDrawer}/>
         </Drawer>
 
         {/* The drawer to be displayed on wide screens. */}
