@@ -41,7 +41,7 @@ export default function MyLearningStyle(props) {
             </Typography>
 
             <Typography sx={{ mb: 5 }}>
-                Please visit <Link href="https://www.webtools.ncsu.edu/learningstyles/">this website</Link> to find out your studying personality through a quick five-minute questionnaire.
+                Please visit <Link href="https://www.webtools.ncsu.edu/learningstyles/" target="_blank">this website</Link> to find out your studying personality through a quick five-minute questionnaire.
             </Typography>
 
             <Typography variant="h6">
