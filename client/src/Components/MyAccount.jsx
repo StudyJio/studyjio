@@ -16,31 +16,84 @@ export default function MyAccount() {
      * Variables and functions used by the popover menu which opens when the profile picture is clicked.
      */
 
+    // The element (El) to which the popover menu is anchored. When the element is null, the popover menu is not displayed.
     const [anchorEl, setAnchorEl] = useState(null);
 
-    function handleClickProfilePhoto(event) {
+    const isProfilePictureMenuOpen = Boolean(anchorEl);
+
+    const profilePictureMenuId = isProfilePictureMenuOpen ? 'profile-picture-menu' : undefined;
+
+    // When the profile picture is clicked, ...
+    function handleClickProfilePicture(event) {
         setAnchorEl(event.currentTarget);
     }
 
-    function handleCloseProfilePhotoMenu() {
+    function handleCloseProfilePictureMenu() {
         setAnchorEl(null);
     }
 
-    function handleClickSelectPhoto() {
-        // 
-    }
-
-    function handleClickRemovePhoto() {
+    function handleClickRemovePicture() {
         // TODO: Delete the user's current profile picture from the database.
+        //       (Ensure that the the default profile picture is now displayed.)
 
         // Close the popover menu.
-        handleCloseProfilePhotoMenu();
+        handleCloseProfilePictureMenu();
     }
 
-    const isProfilePhotoMenuOpen = Boolean(anchorEl);
+    /**
+     * Variables and functions for saving the new profile picture that is uploaded by the user. ===
+     */
+    
+    const [selectedFile, setSelectedFile] = useState();      // Eventually contains the new picture.
+    const [isFilePicked, setIsFilePicked] = useState(false); // Remove if not needed, probably useless.
 
-    const profilePhotoMenuId = isProfilePhotoMenuOpen ? 'profile-picture-menu' : undefined;
+    function handleChangeProfilePicture(event) {
 
+        console.log("The function handleChangeProfilePicture was called.");
+
+        // Set `selectedFile` to the selected file, and record that the file is picked.
+        setSelectedFile(event.target.files[0]);
+        setIsFilePicked(true);
+
+        // TODO: Save the image to the database.
+        handleSubmission();
+    }
+
+    function handleSubmission() {
+
+        console.log("The function handleSubmission was called.");
+
+        const formData = new FormData();
+        formData.append('File', selectedFile);
+
+        fetch(
+            "https://link-to-API-goes-here",
+            {
+                method: 'POST',
+                body: formData
+            }
+        )
+            .then((response) => response.json())
+            .then((result) => {
+                console.log('Success: ", result');
+            })
+            .catch((error) => {
+                console.error('Error: ', error);
+            })
+            .then(() => {
+                // Update the user interface to display the new profile picture from the server.
+            })
+            .then(() => {
+                // Reset `selectedFile` and `isFilePicked` to `null` and `false` respectively to allow the
+                // user to change their profile picture more than one time.
+                console.log("selectedFile and isFilePicked have been reset.");
+                setSelectedFile(null);
+                setIsFilePicked(false);
+            });
+
+        
+        
+    }
 
     /**
      * Return statement ===========================================================================
@@ -54,16 +107,16 @@ export default function MyAccount() {
 
                 <Box display="flex" justifyContent="center">
                     <Avatar
-                        src="./DefaultProfilePhoto.jpg"
+                        // src= TODO: Get the user's profile picture from Supabase.
                         style={{ width: 150, height: 150 }}
-                        onClick={handleClickProfilePhoto}
+                        onClick={handleClickProfilePicture}
                     />
 
                     <Popover
-                        id={profilePhotoMenuId}
-                        open={isProfilePhotoMenuOpen}
+                        id={profilePictureMenuId}
+                        open={isProfilePictureMenuOpen}
                         anchorEl={anchorEl}
-                        onClose={handleCloseProfilePhotoMenu}
+                        onClose={handleCloseProfilePictureMenu}
                         anchorOrigin={{
                             horizontal: 'left',
                             vertical: 'bottom'
@@ -73,7 +126,7 @@ export default function MyAccount() {
                         }}
                     >
                         <label htmlFor="contained-button-file">
-                            <Input accept="image/*" id="contained-button-file" type="file" sx={{display: 'none'}}/>
+                            <Input accept="image/*" id="contained-button-file" type="file" sx={{display: 'none'}} onChange={handleChangeProfilePicture}/>
                             <Button variant="outlined" component="span" sx={{m: 1}} startIcon={<UploadFileRoundedIcon />}>
                                 Upload Photo...
                             </Button>
@@ -83,7 +136,7 @@ export default function MyAccount() {
                             startIcon={<DeleteRoundedIcon />}
                             variant="outlined"
                             sx={{m: 1}}
-                            onClick={handleCloseProfilePhotoMenu}
+                            onClick={handleCloseProfilePictureMenu}
                         >
                             Remove photo
                         </Button>
