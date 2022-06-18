@@ -45,7 +45,7 @@ export default function MyAccount() {
      */
     
     const [selectedFile, setSelectedFile] = useState();      // Eventually contains the new picture.
-    const [isFilePicked, setIsFilePicked] = useState(false); // Remove if not needed, probably useless.
+    const [isFilePicked, setIsFilePicked] = useState(false); // Remove if not needed, probably.
 
     function handleChangeProfilePicture(event) {
 
