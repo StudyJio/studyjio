@@ -5,12 +5,16 @@ import { Input } from "@mui/material";
 import { Popover } from "@mui/material";
 import { Paper } from "@mui/material";
 import { Typography } from "@mui/material";
+import { Alert } from "@mui/material";
+import { AlertTitle } from "@mui/material";
 import { Box, textAlign } from "@mui/system";
 import { useState, useRef } from "react";
 import UploadFileRoundedIcon from "@mui/icons-material/UploadFileRounded";
 import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
 import { supabase } from "../supabase";
 import bcrypt from "bcryptjs";
+import DefaultProfilePhoto from "./DefaultProfilePhoto.jpg";
+
 
 export default function MyAccount() {
   /**
@@ -51,7 +55,6 @@ export default function MyAccount() {
       returning: "minimal", // Don't return the value after inserting
     });
   };
-
 
   // const resetPasswordHandler = async (event) => {
   //   event.preventDefault();
@@ -117,13 +120,13 @@ export default function MyAccount() {
     const formData = new FormData();
     formData.append("File", selectedFile);
 
-    fetch("https://link-to-API-goes-here", {
+    fetch("https://raqxffxcknwwrzqjpemc.supabase.co", {
       method: "POST",
       body: formData,
     })
       .then((response) => response.json())
       .then((result) => {
-        console.log('Success: ", result');
+        console.log("Success: ", result);
       })
       .catch((error) => {
         console.error("Error: ", error);
@@ -209,48 +212,48 @@ export default function MyAccount() {
               input: { textAlign: "center" },
             }}
           />
-          <Button type="submit" variant="contained">
+          <Button type="submit" variant="contained" onClick={() => alert("Your changes have been saved.")}>
             {" "}
-            Save changes{" "}
+            Save changes
           </Button>
         </form>
       </Paper>
 
       <Paper sx={{ my: 2, p: 2, width: 300 }}>
         {/* <form onSubmit={resetPasswordHandler}> */}
-          <Typography variant="h5" sx={{ mb: 2 }}>
-            {" "}
-            Change Password{" "}
-          </Typography>
+        <Typography variant="h5" sx={{ mb: 2 }}>
+          {" "}
+          Change Password{" "}
+        </Typography>
 
-          <TextField
-            // inputRef={oldPasswordInputRef}
-            label="Current Password"
-            type="password"
-            fullWidth
-            sx={{ display: "block", mb: 1 }}
-          />
+        <TextField
+          // inputRef={oldPasswordInputRef}
+          label="Current Password"
+          type="password"
+          fullWidth
+          sx={{ display: "block", mb: 1 }}
+        />
 
-          <TextField
-            // inputRef={newPasswordInputRef}
-            label="New Password"
-            type="password"
-            fullWidth
-            sx={{ display: "block", mb: 1 }}
-          />
+        <TextField
+          // inputRef={newPasswordInputRef}
+          label="New Password"
+          type="password"
+          fullWidth
+          sx={{ display: "block", mb: 1 }}
+        />
 
-          <TextField
-            // inputRef={confirmNewPasswordInputRef}
-            label="Confirm New Password"
-            type="password"
-            fullWidth
-            sx={{ display: "block", mb: 2 }}
-          />
+        <TextField
+          // inputRef={confirmNewPasswordInputRef}
+          label="Confirm New Password"
+          type="password"
+          fullWidth
+          sx={{ display: "block", mb: 2 }}
+        />
 
-          <Button type="submit" variant="contained">
-            {" "}
-            Reset Password{" "}
-          </Button>
+        <Button type="submit" variant="contained">
+          {" "}
+          Reset Password{" "}
+        </Button>
         {/* </form> */}
       </Paper>
 
