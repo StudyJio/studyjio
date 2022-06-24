@@ -96,6 +96,8 @@ function TeamPreferences() {
 
   const saveTeamPreferencesToServer = async () => {
     // TODO
+    alert("Your preferences have been saved.")
+    
     const teamPreferences = {
       updated_at: new Date(),
       modules_taken: userModules,
