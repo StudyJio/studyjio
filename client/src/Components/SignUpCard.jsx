@@ -41,6 +41,7 @@ export default function SignUpCard() {
             <Typography variant="h4" sx={{pb: 1}}> Sign Up </Typography>
         
             <TextField
+                id="sign-up-card-email-input"
                 required
                 fullWidth
                 label="Email"
@@ -49,6 +50,7 @@ export default function SignUpCard() {
             />
 
             <TextField
+                id="sign-up-card-password-input"
                 required
                 fullWidth
                 type="password"
@@ -58,6 +60,7 @@ export default function SignUpCard() {
             />
 
             <TextField
+                id="sign-up-card-confirm-password-input"
                 required
                 fullWidth
                 type="password"
@@ -67,6 +70,7 @@ export default function SignUpCard() {
             />
 
             <Button
+                id="sign-up-card-submit-button"
                 variant="contained"
                 sx={{display: 'block'}}
                 onClick={handleSubmit}
