@@ -10,10 +10,9 @@ export default function LoginCard() {
     
     const emailRef = useRef();
     const passwordRef = useRef();
-  
-    const [error, setError] = useState(true); // TODO: Figure out why the default value can be true.
-    // Is this error overridden by the error in line 31?
 
+    const [loginErrorMessage, setLoginErrorMessage] = useState("");
+  
     function signIn(data) {
         return supabase.auth.signIn(data);
     }
@@ -27,8 +26,7 @@ export default function LoginCard() {
         const {user, session, error} = await signIn({email, password});
 
         if (error) {
-            setError(error); // TODO: Find out what else could cause an error here.
-            alert("Wrong password!");
+            setLoginErrorMessage(error.message);
         }
 
     }
@@ -65,6 +63,10 @@ export default function LoginCard() {
             >
                 Log in
             </Button>
+
+            <Typography sx={{ color: 'error.main', pt: 2 }}>
+                {loginErrorMessage}
+            </Typography>
         </Card>
     )
 }

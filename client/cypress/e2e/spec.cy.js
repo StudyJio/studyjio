@@ -7,29 +7,37 @@ describe("Signed Out Page", () => {
   })
 })
 
-describe("Signing Up", () => {
+describe("Logging in", () => {
   // Try logging in using an incorrect email and password combination.
   it("Cannot log in with incorrect email and password", () => {
     cy.visit('http://localhost:3000')
 
-    // Note: cy.get("...") always two elements for some reason.
-    // We select the second element (index 1) to be able to type the email in.
-    cy.get("[data-cy=log-in-card-email-input]")
-      .eq(1).
-      type("obviously@wrong.email")
-    cy.get("[data-cy=log-in-card-password-input]")
-      .eq(1)
+    cy.get("[data-cy=log-in-card-email-input]") // Select the text field for email.
+      .eq(1) // For some reason, this yields two elements. The correct one is the second one.
+      .type("obviously@wrong.email")
+    cy.get("[data-cy=log-in-card-password-input]") // Select the text field for password.
+      .eq(1) // For some reason, this yields two elements. The correct one is the second one.
       .type("obviously-wrong-password")
-
-    let spy = cy.spy(window, 'alert');
-
-    // When the 'LOG IN' button is pressed, an alert should appear.
-    cy.get("[data-cy=log-in-card-submit-button]")
-      .eq(1)
+    cy.get("[data-cy=log-in-card-submit-button]") // Select the submit button.
+      .eq(1) // For some reason, this yields two elements. The correct one is the second one.
       .click()
-      .then(() => {
-        expect(spy).to.be.called;
-      });
+    cy.contains("Invalid login credentials") // This string should appear.
+  })
+
+  // Try logging in using a correct email and password combination.
+  it("Can log in with incorrect email and password", () => {
+    cy.visit('http://localhost:3000')
+
+    cy.get("[data-cy=log-in-card-email-input]") // Select the text field for email.
+      .eq(1) // For some reason, this yields two elements. The correct one is the second one.
+      .type("testing-account@test.com")
+    cy.get("[data-cy=log-in-card-password-input]") // Select the text field for password.
+      .eq(1) // For some reason, this yields two elements. The correct one is the second one.
+      .type("testing-account-password")
+    cy.get("[data-cy=log-in-card-submit-button]") // Select the submit button.
+      .eq(1) // For some reason, this yields two elements. The correct one is the second one.
+      .click()
+    cy.contains("Meetup Scheduler") // We should be able to see the logged in area.
   })
 })
 
