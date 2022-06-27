@@ -39,16 +39,16 @@ export default function LoginCard() {
             <Typography variant="h4" sx={{pb: 1}}> Log In </Typography>
 
             <TextField
-                    id="log-in-card-email-input"
-                    required
-                    fullWidth
-                    label="Email"
-                    inputRef={emailRef}
-                    sx={{display: 'block', py: 1}}
+                data-cy="log-in-card-email-input"
+                required
+                fullWidth
+                label="Email"
+                inputRef={emailRef}
+                sx={{display: 'block', py: 1}}
             />
 
             <TextField
-                id="log-in-card-password-input"
+                data-cy="log-in-card-password-input"
                 required
                 fullWidth
                 type="password"
@@ -58,7 +58,7 @@ export default function LoginCard() {
             />
 
             <Button
-                id="log-in-card-submit-button"
+                data-cy="log-in-card-submit-button"
                 variant="contained"
                 sx={{display: 'block'}}
                 onClick={handleSubmit}

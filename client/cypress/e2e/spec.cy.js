@@ -14,17 +14,17 @@ describe("Signing Up", () => {
 
     // Note: cy.get("...") always two elements for some reason.
     // We select the second element (index 1) to be able to type the email in.
-    cy.get("[id=log-in-card-email-input]")
+    cy.get("[data-cy=log-in-card-email-input]")
       .eq(1).
       type("obviously@wrong.email")
-    cy.get("[id=log-in-card-password-input]")
+    cy.get("[data-cy=log-in-card-password-input]")
       .eq(1)
       .type("obviously-wrong-password")
 
     let spy = cy.spy(window, 'alert');
 
     // When the 'LOG IN' button is pressed, an alert should appear.
-    cy.get("[id=log-in-card-submit-button]")
+    cy.get("[data-cy=log-in-card-submit-button]")
       .eq(1)
       .click()
       .then(() => {
