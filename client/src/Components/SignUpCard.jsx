@@ -13,7 +13,7 @@ export default function SignUpCard() {
     const passwordRef = useRef();
     const confirmPasswordRef = useRef();
 
-    const [error, setError] = useState(true);
+    const [signUpErrorMessage, setSignUpErrorMessage] = useState("");
 
     function signUp(data) {
         return supabase.auth.signUp(data);
@@ -24,14 +24,16 @@ export default function SignUpCard() {
 
         // Check that the 'Confirm Password' entered matches the 'Password' entered.
         if (passwordRef.current.value !== confirmPasswordRef.current.value) {
-            alert("Passwords do not match!")
+            setSignUpErrorMessage("Passwords do not match!")
             return;
         }
 
         const email = emailRef.current.value;       // a String
         const password = passwordRef.current.value; // a String
 
-        const res = await signUp({email, password});
+        const {user, session, error} = await signUp({email, password});
+
+        setSignUpErrorMessage(error.message);
 
     }
 
@@ -77,6 +79,10 @@ export default function SignUpCard() {
             >
                 Sign Up
             </Button>
+
+            <Typography sx={{ color: 'error.main', pt: 2 }}>
+                {signUpErrorMessage}
+            </Typography>
 
         </Card>
     )
