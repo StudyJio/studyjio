@@ -24,7 +24,7 @@ export default function SignUpCard() {
 
         // Check that the 'Confirm Password' entered matches the 'Password' entered.
         if (passwordRef.current.value !== confirmPasswordRef.current.value) {
-            setSignUpErrorMessage("Passwords do not match!")
+            setSignUpErrorMessage("Passwords do not match")
             return;
         }
 

@@ -205,7 +205,7 @@ export default function MyAccount() {
           <TextField
             inputRef={usernameInputRef}
             fullWidth
-            defaultValue="Ben Awad"
+            defaultValue="Ben Awad" // TODO: Get the user's display name from the database.
             sx={{
               display: "block",
               my: 2,
