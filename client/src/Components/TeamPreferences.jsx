@@ -6,12 +6,14 @@ import {
   StepLabel,
   Stepper,
 } from "@mui/material";
-import { useState } from "react";
+import {
+  useState,
+  useEffect
+} from "react";
 import MyLearningStyle from "./TeamPreferencesComponents/MyLearningStyle";
 import MyModules from "./TeamPreferencesComponents/MyModules";
 import MyLocation from "./TeamPreferencesComponents/MyLocation";
 import { supabase } from "../supabase";
-import { isBrowser } from "@emotion/utils";
 
 function TeamPreferences() {
 
@@ -22,50 +24,55 @@ function TeamPreferences() {
    * These variables are stored in the database when the user clicks on the SAVE button.
    */
 
-  // TODO: Load the user's current team preferences from the database.
-  //       These values will be displayed to the user in the UI to provide confirmation that the
-  //       user's team preferences have been saved to the server when the user revisits the
-  //       "My Team Preferences" page.
-  //
-  //       Sample values are coded in.
-
-  const currentTeamPreferences = {
-    modules_taken: "",
-    learningstyle_d0: 1,
-    learningstyle_d1: 1,
-    learningstyle_d2: 1,
-    learningstyle_d3: 1,
-    on_or_off_campus: "on campus",
-    location: "Residential College 4"
-  }
-
   // A string of module codes delimited by newline characters, e.g. "IS1103\nIS1104".
   // (The newline character is \n or \r\n depending on the operating system.)
-  const [userModules, setUserModules] = useState(); // The default value is null, I think.
+  const [userModules, setUserModules] = useState(""); // The default value is null, I think.
 
-  // Four odd integers within the range [-11, 11], e.g. [3, -11, 1, 5].
+  // Four odd integers within the range [-11, 11].
   // Represents the user's learning style in the four following dimensions, in order:
   //           (-11 <-----> 11)
   // [0]     Active <-----> Reflective
   // [1]    Sensing <-----> Intuitive
   // [2]     Visual <-----> Verbal
   // [3] Sequential <-----> Global
-  const [userLearningStyleDimension0, setUserLearningStyleDimension0] =
-    useState(currentTeamPreferences.learningstyle_d0 ?? 1); // The default values are 1.
-  const [userLearningStyleDimension1, setUserLearningStyleDimension1] =
-    useState(currentTeamPreferences.learningstyle_d1 ?? 1);
-  const [userLearningStyleDimension2, setUserLearningStyleDimension2] =
-    useState(currentTeamPreferences.learningstyle_d1 ?? 1);
-  const [userLearningStyleDimension3, setUserLearningStyleDimension3] =
-    useState(currentTeamPreferences.learningstyle_d1 ?? 1);
+  const [userLearningStyleDimension0, setUserLearningStyleDimension0] = useState(1);
+  const [userLearningStyleDimension1, setUserLearningStyleDimension1] = useState(1);
+  const [userLearningStyleDimension2, setUserLearningStyleDimension2] = useState(1);
+  const [userLearningStyleDimension3, setUserLearningStyleDimension3] = useState(1);
 
   // A string representing whether the user lives on campus or off campus.
   // The only two possible values are "on campus" and "off campus".
-  const [userOnOrOffCampus, setUserOnOrOffCampus] = useState(currentTeamPreferences.on_or_off_campus ?? "on campus"); // The default option is "on campus".
+  const [userOnOrOffCampus, setUserOnOrOffCampus] = useState("");
 
   // A string representing the user's location. This variable is used no matter the user lives on campus or off campus.
   // e.g. "Residential College 4" or "Bencoolen"
-  const [userLocation, setUserLocation] = useState(currentTeamPreferences.location ?? null);
+  const [userLocation, setUserLocation] = useState("");
+
+  /** ============================================================================================
+   * Load the user's current team preferences from the database when the component is mounted.
+   */
+
+  useEffect( () => {
+    async function fetchTeamPreferences() {
+      let { data, error } = await supabase
+        .from('user_team_preferences')
+        .select('*')
+        .eq("id", user.id);
+      return data[0];
+    }
+    
+    fetchTeamPreferences()
+      .then(data => {
+        setUserModules(data.modules_taken);
+        setUserLearningStyleDimension0(data.learning_style_dimension_0);
+        setUserLearningStyleDimension1(data.learning_style_dimension_1);
+        setUserLearningStyleDimension2(data.learning_style_dimension_2);
+        setUserLearningStyleDimension3(data.learning_style_dimension_3);
+        setUserOnOrOffCampus(data.on_or_off_campus);
+        setUserLocation(data.location);
+      })
+      .catch(console.error)
+  }, []) 
 
   /** ===========================================================================================
    * Variables and functions used by the Stepper.
@@ -112,24 +119,25 @@ function TeamPreferences() {
   }
 
   const saveTeamPreferencesToServer = async () => {
-    // TODO
+
     alert("Your preferences have been saved.")
     
     const teamPreferences = {
+      id: user.id,
       updated_at: new Date(),
       modules_taken: userModules,
-      learningstyle_d0: userLearningStyleDimension0,
-      learningstyle_d1: userLearningStyleDimension1,
-      learningstyle_d2: userLearningStyleDimension2,
-      learningstyle_d3: userLearningStyleDimension3,
+      learning_style_dimension_0: userLearningStyleDimension0,
+      learning_style_dimension_1: userLearningStyleDimension1,
+      learning_style_dimension_2: userLearningStyleDimension2,
+      learning_style_dimension_3: userLearningStyleDimension3,
       on_or_off_campus: userOnOrOffCampus,
       location: userLocation,
     };
 
     const { data, error } = await supabase
-      .from("profiles")
-      .update(teamPreferences) // Don't return the value after inserting
-      .match({ id: user.id });
+      .from("user_team_preferences")
+      .upsert(teamPreferences)
+      .eq('id', user.id);
 
   };
 
