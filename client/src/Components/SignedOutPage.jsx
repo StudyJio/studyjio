@@ -73,9 +73,9 @@ export default function Auth(props) {
                 <Button
                     variant="contained"
                     onClick={() => props.setSession(true)}
-                    sx={{ display: 'inline', my: 3 }}
+                    sx={{ display: 'inline', mt: 3 }}
                 >
-                    Magical Admin Log In Button
+                    Magical Admin Log In Button (No database access)
                 </Button>
 
             </Grid>

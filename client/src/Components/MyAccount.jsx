@@ -8,7 +8,7 @@ import { Typography } from "@mui/material";
 import { Alert } from "@mui/material";
 import { AlertTitle } from "@mui/material";
 import { Box, textAlign } from "@mui/system";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import UploadFileRoundedIcon from "@mui/icons-material/UploadFileRounded";
 import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
 import { supabase } from "../supabase";
@@ -17,6 +17,56 @@ import DefaultProfilePhoto from "./DefaultProfilePhoto.jpg";
 
 
 export default function MyAccount() {
+
+  const user = supabase.auth.user();
+
+  /** =============================================================================================
+   * Variables and functions used by the user's display name field.
+   */
+
+  const [displayName, setDisplayName] = useState("");
+
+  useEffect(() => {
+    async function fetchUserDisplayName() {
+      let { data, error } = await supabase
+        .from('user_profiles')
+        .select('*') // We potentially want to get other types of information from the table user_profiles.
+        .eq("id", user.id);
+      return data[0];
+    }
+    
+    fetchUserDisplayName()
+      .then(data => {
+        setDisplayName(data.display_name)
+      })
+      .catch(console.error)
+  }, [])
+
+
+  async function handleChangeDisplayName(event) {
+    // Locally change what is shown in the TextField.
+    setDisplayName(event.target.value);
+  }
+
+  async function handleSaveProfileChanges(event) {
+    // Prevent the page from refreshing.
+    event.preventDefault();
+
+    const dataToWrite = {
+      id: user.id,
+      updated_at: new Date(),
+      display_name: displayName,
+    };
+
+    // Update the database.
+    const { data, error } = await supabase
+      .from('user_profiles')
+      .upsert(dataToWrite)
+      .eq('id', user.id)
+
+    alert("Your changes have been saved.")
+  }
+
   /**
    * Variables and functions used by the popover menu which opens when the profile picture is clicked.
    */
@@ -30,7 +80,7 @@ export default function MyAccount() {
     ? "profile-picture-menu"
     : undefined;
 
-  const user = supabase.auth.user();
+  
   const usernameInputRef = useRef();
   // const emailInputRef = useRef();
   // const oldPasswordInputRef = useRef();
@@ -51,6 +101,7 @@ export default function MyAccount() {
 
     console.log(userData);
 
+    
     const { data, error } = await supabase.from("profiles").upsert(userData, {
       returning: "minimal", // Don't return the value after inserting
     });
@@ -152,7 +203,7 @@ export default function MyAccount() {
       <Typography variant="h4"> My Account </Typography>
 
       <Paper sx={{ my: 2, p: 2, width: 300 }}>
-        <form onSubmit={saveUsernameHandler}>
+        <form onSubmit={handleSaveProfileChanges}>
           <Box display="flex" justifyContent="center">
             <Avatar
               // src= TODO: Get the user's profile picture from Supabase.
@@ -199,21 +250,25 @@ export default function MyAccount() {
               >
                 Remove photo
               </Button>
+              <Typography sx={{m: 1}}>
+              We have not yet implemented writing and reading profile pictures to and from our database.
+          </Typography>
             </Popover>
           </Box>
-
+          
           <TextField
-            inputRef={usernameInputRef}
+            value={displayName}
+            variant="standard"
+            label="Display Name"
             fullWidth
-            defaultValue="Ben Awad" // TODO: Get the user's display name from the database.
+            onChange={handleChangeDisplayName}
             sx={{
               display: "block",
               my: 2,
               input: { textAlign: "center" },
             }}
           />
-          <Button type="submit" variant="contained" onClick={() => alert("Your changes have been saved.")}>
-            {" "}
+          <Button type="submit" variant="contained">
             Save changes
           </Button>
         </form>
@@ -247,17 +302,19 @@ export default function MyAccount() {
           label="Confirm New Password"
           type="password"
           fullWidth
-          sx={{ display: "block", mb: 2 }}
+          sx={{ display: "block", mb: 1 }}
         />
 
-        <Button type="submit" variant="contained">
-          {" "}
-          Reset Password{" "}
+        <Typography sx={{mb: 1}}>
+            This feature is not yet implemented.
+        </Typography>
+
+        <Button disabled variant="contained">
+          Reset Password
         </Button>
-        {/* </form> */}
       </Paper>
 
-      <Button variant="contained">Sign Out</Button>
+      {/* <Button variant="contained">Sign Out</Button> */}
     </>
   );
 }
