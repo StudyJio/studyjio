@@ -7,7 +7,35 @@ import { Box } from "@mui/system";
 import React from "react";
 import DefaultProfilePhoto from "./DefaultProfilePhoto.jpg";
 
-const TeamMembers = () => {
+function cardGenerator(name, username) {
+    return (
+        <Card sx={{ maxWidth: 200 }}>
+
+            <CardMedia
+                component="img"
+                height="200"
+                image={DefaultProfilePhoto}
+                alt="alt" />
+
+            <CardContent>
+                <Typography variant="h5" gutterBottom style={{ wordWrap: "break-word" }}>
+                    {name}
+                </Typography>
+
+                <Typography variant="h6">
+                    Telegram
+                </Typography>
+
+                <Typography style={{ wordWrap: "break-word" }}>
+                    {username}
+                </Typography>
+            </CardContent>
+
+        </Card>
+    );
+}
+
+export default function TeamMembers() {
     return (
         <Box>
             <Typography variant="h4" gutterBottom>
@@ -25,40 +53,8 @@ const TeamMembers = () => {
                 <Grid item> {cardGenerator("Brian", "@brianbrain")} </Grid>
                 <Grid item> {cardGenerator("Stewie", "@myheadisoval")} </Grid>
             </Grid>
-            
+
         </Box>
     );
-};
-
-const cardGenerator = (name, username) => {
-    return (
-        <Card sx={{maxWidth: 200}}>
-                
-                <CardMedia
-                    component = "img"
-                    height = "200"
-                    image = {DefaultProfilePhoto}
-                    alt = "alt"
-                />
-
-                <CardContent>
-                    <Typography variant="h5" gutterBottom style={{wordWrap: "break-word"}}>
-                        {name}
-                    </Typography>
-
-                    <Typography variant="h6">
-                        Telegram
-                    </Typography>
-
-                    <Typography style={{wordWrap: "break-word"}}>
-                        {username}
-                    </Typography>
-                </CardContent>
-
-            </Card>
-    )
 }
 
-
-
-export default TeamMembers;

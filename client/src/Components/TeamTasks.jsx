@@ -27,10 +27,14 @@ function getTasksFromAPI() {
             {name: "Lecture 3", week: "3", doneByMember1: true, doneByMember2: false, doneByMember3: false, doneByMember4: false, doneByMember5: false}];
 }
 
-function displayTaskAsRow(task) {
+function displayTaskAsRow(task, key) {
     // For now, we assume that all teams have five members.
+    // TODO: Fetch the task ID from the database.
+    // Use it as the "key" prop for each... TableRow? to prevent the warning
+    // "Warning: Each child in a list should have a unique "key" prop.
+    // Currently, the warning is silenced using the array ID, which is not a good practice.
     return (
-        <TableRow>
+        <TableRow key={key}>
             <TableCell> {task.name} </TableCell>
             <TableCell> {task.week} </TableCell>
             <TableCell align="center"> <Checkbox defaultChecked={task.doneByMember1} /> </TableCell>
@@ -56,19 +60,21 @@ function TeamTasks() {
             <TableContainer component={Paper}>
                 <Table>
                     <TableHead>
-                        <TableCell> Task </TableCell>
-                        <TableCell> Week </TableCell>
-                        <TableCell align="center"> {getTeamMemberNames()[0]} </TableCell>
-                        <TableCell align="center"> {getTeamMemberNames()[1]} </TableCell>
-                        <TableCell align="center"> {getTeamMemberNames()[2]} </TableCell>
-                        <TableCell align="center"> {getTeamMemberNames()[3]} </TableCell>
-                        <TableCell align="center"> {getTeamMemberNames()[4]} </TableCell>
-                        <TableCell> </TableCell>
-                        <TableCell> </TableCell>
+                        <TableRow>
+                            <TableCell> Task </TableCell>
+                            <TableCell> Week </TableCell>
+                            <TableCell align="center"> {getTeamMemberNames()[0]} </TableCell>
+                            <TableCell align="center"> {getTeamMemberNames()[1]} </TableCell>
+                            <TableCell align="center"> {getTeamMemberNames()[2]} </TableCell>
+                            <TableCell align="center"> {getTeamMemberNames()[3]} </TableCell>
+                            <TableCell align="center"> {getTeamMemberNames()[4]} </TableCell>
+                            <TableCell> </TableCell>
+                            <TableCell> </TableCell>
+                        </TableRow>
                     </TableHead>
 
                     <TableBody>
-                        {teamTasks.map(task => displayTaskAsRow(task))}
+                        {teamTasks.map((task, index) => displayTaskAsRow(task, index))}
                     </TableBody>
 
                 </Table>

@@ -37,10 +37,11 @@ function Header(props) {
             <Toolbar>
 
                 {/* A menu button that appears only on narrow screens. */}
-                <IconButton>
+                <IconButton
+                    onClick={props.handleToggleMobileDrawer}
+                >
                     <MenuRoundedIcon
                         sx={{ color: 'white', display: { sm: 'none' }, mr: '5px' }}
-                        onClick={props.handleToggleMobileDrawer}
                     />
                 </IconButton>
                 

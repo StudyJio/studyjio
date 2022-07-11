@@ -22,7 +22,6 @@ describe("LoginCard.jsx", () => {
         render(<LoginCard />);
         const emailFieldElement = screen.getByRole("textbox", { name: /email/i });
         expect(emailFieldElement).toBeVisible();
-
     });
 
     it("email field is initially empty", async () => {
