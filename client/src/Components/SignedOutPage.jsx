@@ -33,9 +33,9 @@ export default function Auth(props) {
 
     function LoginBesideSignUp() {
         return (<Grid container>
-            <Grid item xs="5.5"> <LoginCard /> </Grid>
-            <Grid item xs="1"> </Grid>
-            <Grid item xs="5.5"> <SignUpCard /> </Grid>
+            <Grid item xs={5.5}> <LoginCard /> </Grid>
+            <Grid item xs={1}> </Grid>
+            <Grid item xs={5.5}> <SignUpCard /> </Grid>
         </Grid>);
     }
 
@@ -50,11 +50,11 @@ export default function Auth(props) {
 
         <Grid container>
 
-            <Grid item xs="1" lg="3">
+            <Grid item xs={1} lg={3}>
                 {/* Left margin. */}
             </Grid>
 
-            <Grid item xs="10" lg="6">
+            <Grid item xs={10} lg={6}>
 
                 <Typography variant="h3" sx={{ marginTop: "60px" }}> StudyJio </Typography>
 
@@ -80,7 +80,7 @@ export default function Auth(props) {
 
             </Grid>
 
-            <Grid item xs="1" lg="3">
+            <Grid item xs={1} lg={3}>
                 {/* Right margin. */}
             </Grid>
 
