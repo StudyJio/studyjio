@@ -12,7 +12,7 @@ import { useEffect } from "react";
 /**
  * Return the profile photo, Telegram username, display name of the user's team members.
  */
-async function getTeamMembers() {
+export async function getTeamMembers() {
 
     const user = supabase.auth.user();
 

@@ -51,34 +51,31 @@ export default function MeetupScheduler() {
     // e.g. ["1 Aug", "2 Aug" ..., "7 Aug"].
     const [datesForWeek, setDatesForWeek] = useState(getDatesForWeek(currentWeekSelected));
 
-    const response_team_availability = {
-        // This is a sample response from the database.
-        // Key: Number of days since the start of the week.
-        // Value: An int[24] of how many team members are available on the day.
-        0: [4, 4, 4, 4, 4, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 2, 2, 2, 2, 2, 1, 2, 3, 4],
-        1: [4, 4, 4, 4, 4, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 2, 2, 2, 2, 2, 1, 2, 3, 4],
-        2: [4, 4, 4, 4, 4, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 2, 2, 2, 2, 2, 1, 2, 3, 4],
-        3: [4, 4, 4, 4, 4, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 2, 2, 2, 2, 2, 1, 2, 3, 4],
-        4: [4, 4, 4, 4, 4, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 2, 2, 2, 2, 2, 1, 2, 3, 4],
-        5: [4, 4, 4, 4, 4, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 2, 2, 2, 2, 2, 1, 2, 3, 4],
-        6: [4, 4, 4, 4, 4, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 2, 2, 2, 2, 2, 1, 2, 3, 4],
-    }
-
     const emptyUserAvailability = {   // This default value will eventually be replaced by the
         0: Array(24).fill(false),     // response from the database.
         1: Array(24).fill(false),
-        2: Array(24).fill(false),
+        2: Array(24).fill(false),     // TODO: The nullish coalescing operator (?.[]) renders this useless.
         3: Array(24).fill(false),
         4: Array(24).fill(false),
         5: Array(24).fill(false),
         6: Array(24).fill(false),
     }
 
-    // A JSON object with 7 keys. Each value is a boolean[24].
+    const emptyTeamAvailability = {   // This default value will eventually be replaced by the
+        0: Array(24).fill(0),         // response from the database.
+        1: Array(24).fill(0),
+        2: Array(24).fill(0),
+        3: Array(24).fill(0),
+        4: Array(24).fill(0),
+        5: Array(24).fill(0),
+        6: Array(24).fill(0),
+    }
+
+    // A JSON object with 7 keys. Each value is an array of 24 booleans.
     const [userAvailability, setUserAvailability] = useState(emptyUserAvailability)
 
-    // A JSON object with 7 keys. Each value is an int[24].
-    const [teamAvailability, setTeamAvailability] = useState({})
+    // A JSON object with 7 keys. Each value is an array of 24 integers.
+    const [teamAvailability, setTeamAvailability] = useState(emptyTeamAvailability)
 
     const user = supabase.auth.user();
 
@@ -88,7 +85,8 @@ export default function MeetupScheduler() {
             .from('user_meetup_availability')
             .select(week)
             .eq("id", user.id);
-        return data[0][week];
+        setUserAvailability(data[0][week]);
+
     }
 
     async function saveUserAvailability(week) {
@@ -105,17 +103,85 @@ export default function MeetupScheduler() {
             .eq("id", user.id)
     }
 
+    const [teamMembers, setTeamMembers] = useState([]);
+
+    /**
+    * Get an array of JSON objects. Each JSON object is a team member.
+    */
+    async function fetchTeamMembers() {
+        // Determine the team_id of the user.
+        const user = supabase.auth.user();
+        let response = await supabase.from('user_profiles').select('team_id').eq('id', user.id);
+        let teamID = response.data[0].team_id ?? null;
+
+        // If the user is not in a team, return an empty array.
+        if (teamID == null) {
+            setTeamMembers([]);
+            return;
+        }
+
+        // Get all users with a matching team_id.
+        const { data, error } = await supabase
+            .from('user_profiles')
+            .select('*')
+            .eq('team_id', teamID);
+        setTeamMembers(data);
+    }
+
+    async function calculateTeamAvailability(currentWeekSelected) {
+        // This function calculates the other team members' availability for the week the user is currently viewing.
+        // It does this by iterating through each team member and calculating their availability.
+        // It then produces a JSON object with 7 keys. Each value is an array of 24 integers.
+
+        const jsonObjectToReturn = {
+            0: Array(24).fill(0),
+            1: Array(24).fill(0),
+            2: Array(24).fill(0),
+            3: Array(24).fill(0),
+            4: Array(24).fill(0),
+            5: Array(24).fill(0),
+            6: Array(24).fill(0),
+        }
+
+        for (let i = 0; i < teamMembers.length; i++) {
+            const teamMember = teamMembers[i];
+            
+            // Skip the member if they are the user.
+            if (teamMember.id === user.id) {
+                continue;
+            }
+
+            // Fetch this team member's availability for currentWeekSelected from the database.
+            const response = await supabase.from('user_meetup_availability').select(currentWeekSelected).eq("id", teamMember.id);
+            const teamMemberAvailability = response.data?.[0]?.[currentWeekSelected]; // A JSON object with 6 keys and 24 boolean values per key.
+            
+            // Iterate through each day of the week.
+            for (let day = 0; day < 7; day++) {
+                    
+                    // Iterate through each hour of the day.
+                    for (let hour = 0; hour < 24; hour++) {
+    
+                        // If this team member is available at this hour, add one to the team availability for this hour.
+                        if (teamMemberAvailability?.[day]?.[hour] ?? false) {
+                            jsonObjectToReturn[day][hour]++;
+                        }
+                    }
+                }
+            }
+        setTeamAvailability(jsonObjectToReturn);
+    }
+
     useEffect(() => {
         // When the page first loads and when the week selected is changed,
         // get the user's availability and user's team's availability from the database.
-        fetchUserAvailability(currentWeekSelected)
-            .then(data => {
-                setUserAvailability(data);
+        
+        fetchUserAvailability(currentWeekSelected).then(() => {
+            fetchTeamMembers().then(() => {
+                calculateTeamAvailability(currentWeekSelected);
             })
-            .catch(console.error)
+        }).catch(console.error)
 
-        setTeamAvailability(response_team_availability);
-    }, [currentWeekSelected])
+    }, [currentWeekSelected]);
 
     function handleClickCheckbox(event) {
 
@@ -139,8 +205,6 @@ export default function MeetupScheduler() {
         // Save the JSON object userAvailability to the database.
         saveUserAvailability(week)
             .catch(console.error);
-
-        // TODO: Fetch the JSON object teamAvailability from the database.
     }
 
     function MeetupSchedulerTable() {
@@ -173,6 +237,7 @@ export default function MeetupScheduler() {
                                                 {hours[hour_index]}&ndash;{hours[(hour_index + 1) % 24]}
                                             </TableCell>
 
+
                                             {
                                                 Array(7)
                                                     .fill(0)
@@ -182,12 +247,15 @@ export default function MeetupScheduler() {
                                                                 <Checkbox
                                                                     data-day={day_index}
                                                                     data-hour={hour_index}
-                                                                    checked={userAvailability?.[day_index]?.[hour_index] ?? false}
+                                                                    checked={userAvailability[day_index][hour_index]}
                                                                     onClick={handleClickCheckbox}
                                                                 />
                                                                 <br />
                                                                 <Typography>
-                                                                    {teamAvailability?.[day_index]?.[hour_index] ?? " "}/5
+                                                                    {
+                                                                        (userAvailability[day_index][hour_index] ? 1 : 0) // The user's availability.
+                                                                        + (teamAvailability[day_index][hour_index] ?? 0) // The number of team members who are available at this hour.
+                                                                    }/{teamMembers?.length ?? 0}
                                                                 </Typography>
                                                             </TableCell>
                                                         }
