@@ -16,82 +16,82 @@ import DeleteRoundedIcon from '@mui/icons-material/DeleteRounded';
 import { useState, useEffect } from "react";
 import { supabase } from "../supabase";
 import { Dialog, DialogActions, DialogContent, DialogTitle, TextField, DialogContentText } from "@mui/material";
+import { Grid } from "@mui/material";
+
+/**
+ * If the user does not have a team, display a message instead of the table of tasks.
+ * The array teamMembers should be empty.
+ */
+
 
 /**
  * Get an array of JSON objects. Each JSON object is a team member.
  */
-async function getTeamMembers() {
-    // Determine the team_id of the user.
-    const user = supabase.auth.user();
-    let response = await supabase.from('user_profiles').select('team_id').eq('id', user.id);
-    let teamID = response.data[0].team_id ?? null;
 
-    // If the user is not in a team, return an empty array.
-    if (teamID == null) {
-        return [];
-    }
-
-    // Get all users with a matching team_id.
-    const { data, error } = await supabase
-        .from('user_profiles')
-        .select('*')
-        .eq('team_id', teamID);
-    return data;
-}
-
-async function getTasks() {
-    // Determine the team_id of the user.
-    const user = supabase.auth.user();
-    let response = await supabase.from('user_profiles').select('team_id').eq('id', user.id);
-    let teamID = response.data[0].team_id ?? null;
-
-    // If the user is not in a team, return an empty array.
-    if (teamID == null) {
-        return [];
-    }
-
-    // Get all tasks with a matching team_id.
-    const { data, error } = await supabase
-        .from('tasks')
-        .select('*')
-        .eq('team_id', teamID);
-
-    return data;
-}
 
 export default function TeamTasks() {
-    const [tasks, setTasks] = useState([]); // An array of JSON objects. Each object is a task.
     const [teamMembers, setTeamMembers] = useState([]); // An array of JSON objects. Each object is a team member.
+    const [tasks, setTasks] = useState([]); // An array of JSON objects. Each object is a task.
+
+    async function getTeamMembers() {
+        // Determine the team_id of the user.
+        const user = supabase.auth.user();
+        let response = await supabase.from('user_profiles').select('team_id').eq('id', user.id);
+        let teamID = response.data[0].team_id ?? null;
+    
+        // If the user is not in a team, set teamMembers to an empty array.
+        if (teamID == null) {
+            setTeamMembers([]);
+            return;
+        }
+    
+        // Get all users with a matching team_id.
+        const { data, error } = await supabase
+            .from('user_profiles')
+            .select('*')
+            .eq('team_id', teamID);
+        
+        setTeamMembers(data);
+        return;
+    }
+
+    async function getTasks() {
+        // Determine the team_id of the user.
+        const user = supabase.auth.user();
+        let response = await supabase.from('user_profiles').select('team_id').eq('id', user.id);
+        let teamID = response.data[0].team_id ?? null;
+    
+        // If the user is not in a team, return an empty array.
+        if (teamID == null) {
+            setTasks([]);
+            return;
+        }
+    
+        // Get all tasks with a matching team_id.
+        const { data, error } = await supabase
+            .from('tasks')
+            .select('*')
+            .eq('team_id', teamID);
+    
+        // Sort the tasks by the column created_at.
+        data.sort((a, b) => {
+            return new Date(a.created_at) - new Date(b.created_at);
+        });
+    
+        setTasks(data);
+        return;
+    }
 
     // When the page is loaded, ...
     useEffect(() => {
 
         // Get the user's team's tasks.
-        getTasks().then(data => {
-            setTasks(data);
-        }).catch(console.error);
+        getTasks().catch(console.error);
 
         // Get the user's team members' display names and user IDs.
-        getTeamMembers().then(data => {
-            setTeamMembers(data);
-        }).catch(console.error);
+        getTeamMembers().catch(console.error);
+
     }, []);
-
-    // When the user presses the 'SAVE AND REFRESH' button, ...
-    async function handleSaveAndRefresh() {
-        // Update the tasks in the database.
-        for (let i = 0; i < tasks.length; i++) {
-            let task = tasks[i];
-            let response = await supabase.from('tasks').upsert(task).eq('id', task.id);
-            console.log("response in handleSaveAndRefresh(): ");
-            console.log(response);
-        }
-
-        // Get the user's team's tasks.
-        getTasks().then(data => {
-            setTasks(data);
-        }).catch(console.error);
-    }
 
     const [editDialogOpen, setEditDialogOpen] = useState(false); // Whether the edit dialog is open.
     const [deleteDialogOpen, setDeleteDialogOpen] = useState(false); // Whether the delete dialog is open.
@@ -132,8 +132,9 @@ export default function TeamTasks() {
     function handleConfirmDelete(event) {
         setDeleteDialogOpen(false);
 
-        // Update the tasks array.
-        setTasks([...tasks.slice(0, indexOfTaskToModify), ...tasks.slice(indexOfTaskToModify + 1)]);
+        // Delete the task object from the database.
+        supabase.from('tasks').delete().eq('id', tasks[indexOfTaskToModify].id)
+            .then(getTasks);
     }
 
     function handleCloseDelete(event) {
@@ -150,15 +151,36 @@ export default function TeamTasks() {
     }
 
     function handleConfirmCreate(event) {
+
         setCreateDialogOpen(false);
 
-        // Add the new task to the tasks array.
-        setTasks([...tasks, { 
+        // Save the new task to the database.
+        const newTask = {
+            // The id of the task will be automatically generated by Supabase.
             name: newTaskName,
             week: newTaskWeek,
-            team_id: teamMembers[0].team_id,
-            completion: {}
-        }]);
+            completion: {},
+            team_id: teamMembers[0].team_id // This is safe the user has to be in a team to be able to create a task.
+        }
+
+        supabase.from('tasks').insert(newTask)
+            .then(getTasks)
+            .catch(console.error);
+    }
+
+    // If the user is not in a team, show a message.
+    if (teamMembers.length === 0) {
+        return (
+            <Box>
+                <Typography variant="h4" gutterBottom>
+                    My Team's Tasks
+                </Typography>
+
+                <Typography py={3}>
+                    You are not a member of any team.
+                </Typography>
+            </Box>
+        );
     }
 
     // Return a table showing the tasks.
@@ -188,7 +210,9 @@ export default function TeamTasks() {
                     </TableHead>
 
                     <TableBody>
-                        { /* Display each task as a row in the table. */
+                        { tasks.length > 0
+                            ?
+                            // Display each task as a row in the table.
                             tasks.map((task, taskIndex) => {
                                 return (
                                     <TableRow key={taskIndex}>
@@ -205,10 +229,12 @@ export default function TeamTasks() {
                                                             }
                                                             checked={task.completion[member.id] ?? false}
                                                             onChange={event => {
-                                                                // Update the task.
-                                                                const newTask = { ...task };
+                                                                // Save the new task to the database.
+                                                                const newTask = { ...task }
                                                                 newTask.completion[member.id] = event.target.checked;
-                                                                setTasks([...tasks.slice(0, taskIndex), newTask, ...tasks.slice(taskIndex + 1)]);
+
+                                                                supabase.from('tasks').update(newTask).eq('id', newTask.id)
+                                                                    .then(getTasks);
                                                             }}
                                                         />
                                                     </TableCell>
@@ -237,21 +263,13 @@ export default function TeamTasks() {
                                         </TableCell>
                                     </TableRow>
                                 );
-                            }
-                            )
+                            })
+                            :
+                            <></>
                         }
-
                     </TableBody>
                 </Table>
             </TableContainer>
-
-            <Button
-                variant="contained"
-                sx={{my: 2, display: 'block'}}
-                onClick={handleSaveAndRefresh}
-            >
-                Save and Refresh
-            </Button>
 
             <Fab
                 color="primary"

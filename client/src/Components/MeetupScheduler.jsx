@@ -85,7 +85,10 @@ export default function MeetupScheduler() {
             .from('user_meetup_availability')
             .select(week)
             .eq("id", user.id);
-        setUserAvailability(data[0][week]);
+
+        // If this is the first time the user visits this page, then data will be [].
+        // In this case, we will use the emptyUserAvailability object.
+        setUserAvailability(data?.[0]?.[week] ?? emptyUserAvailability);
 
     }
 
@@ -113,6 +116,8 @@ export default function MeetupScheduler() {
         const user = supabase.auth.user();
         let response = await supabase.from('user_profiles').select('team_id').eq('id', user.id);
         let teamID = response.data[0].team_id ?? null;
+
+        console.log("In fetchTeamMembers, teamID is: ", teamID);
 
         // If the user is not in a team, return an empty array.
         if (teamID == null) {
@@ -277,6 +282,21 @@ export default function MeetupScheduler() {
 
     function handleChangeWeekSelected(e) {
         setCurrentWeekSelected(e.target.value);
+    }
+
+    // If the user is not in a team, show a message.
+    if (teamMembers.length === 0) {
+        return (
+            <Box>
+                <Typography variant="h4" gutterBottom>
+                    Meetup Scheduler
+                </Typography>
+
+                <Typography py={3}>
+                    You are not a member of any team.
+                </Typography>
+            </Box>
+        );
     }
 
     return (
