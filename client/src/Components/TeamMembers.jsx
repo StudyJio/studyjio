@@ -16,17 +16,22 @@ export async function getTeamMembers() {
 
     const user = supabase.auth.user();
 
+    // If the user is not logged in, return an empty array.
+    if (user === null) {
+        return [];
+    }
+
     // Determine the ID of the team that the user belongs to.
     let response = await supabase.from('user_profiles').select('team_id').eq('id', user.id);
     const teamID = response.data[0].team_id;
 
     console.log("teamID: " + teamID)
 
-    // If the user does not belong to any team, then return just the user.
+    // If the user does not belong to any team, then return an empty array.
     if (teamID === null) {
         // let response2 = await supabase.from('user_profiles').select('*').eq('id', user.id); This can wait.
         console.log("teamID is null")
-        return null;
+        return [];
     }
 
     // Retrieve the list of users who are in the team.
@@ -70,7 +75,6 @@ export default function TeamMembers() {
 
     // The user's team members.
     const [teamMembers, setTeamMembers] = React.useState([]);
-    console.log("TeamMembers.jsx: teamMembers: " + teamMembers);
 
     // When the page is loaded, get the team members.
     useEffect(() => {
@@ -95,7 +99,7 @@ export default function TeamMembers() {
                     teamMembers.map(member => {
                         return (
                             <Grid item>
-                                {cardGenerator(member.display_name, "@telegram_username")}
+                                {cardGenerator(member.display_name, member.telegram_username)}
                             </Grid>
                         );
                     })

@@ -75,6 +75,11 @@ export default function MeetupScheduler() {
 
     async function fetchUserAvailability(week) {
 
+        // If the user is not signed in, do nothing.
+        if (user === null) {
+            return;
+        }
+
         let { data, error } = await supabase
             .from('user_meetup_availability')
             .select(week)

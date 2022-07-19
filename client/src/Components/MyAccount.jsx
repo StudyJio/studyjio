@@ -21,10 +21,11 @@ export default function MyAccount() {
   const user = supabase.auth.user();
 
   /** =============================================================================================
-   * Variables and functions used by the user's display name field.
+   * Variables and functions used by the user's display name and Telegram username field.
    */
 
   const [displayName, setDisplayName] = useState("");
+  const [telegramUsername, setTelegramUsername] = useState("");
 
   useEffect(() => {
     async function fetchUserDisplayName() {
@@ -37,7 +38,8 @@ export default function MyAccount() {
     
     fetchUserDisplayName()
       .then(data => {
-        setDisplayName(data.display_name)
+        setDisplayName(data.display_name);
+        setTelegramUsername(data.telegram_username);
       })
       .catch(console.error)
   }, [])
@@ -56,6 +58,7 @@ export default function MyAccount() {
       id: user.id,
       updated_at: new Date(),
       display_name: displayName,
+      telegram_username: telegramUsername
     };
 
     // Update the database.
@@ -262,6 +265,19 @@ export default function MyAccount() {
             label="Display Name"
             fullWidth
             onChange={handleChangeDisplayName}
+            sx={{
+              display: "block",
+              my: 2,
+              input: { textAlign: "center" },
+            }}
+          />
+
+          <TextField
+            value={telegramUsername}
+            variant="standard"
+            label="Telegram Username"
+            fullWidth
+            onChange={ event => { setTelegramUsername(event.target.value)} }
             sx={{
               display: "block",
               my: 2,
