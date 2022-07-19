@@ -20,19 +20,6 @@ import { supabase } from "../supabase";
 const hours = ["12 A.M.", "1 A.M.", "2 A.M.", "3 A.M.", "4 A.M.", "5 A.M.", "6 A.M.", "7 A.M.", "8 A.M.", "9 A.M.", "10 A.M.", "11 A.M.",
     "12 P.M.", "1 P.M.", "2 P.M.", "3 P.M.", "4 P.M.", "5 P.M.", "6 P.M.", "7 P.M.", "8 P.M.", "9 P.M.", "10 P.M.", "11 P.M."]
 
-
-function getDatesForWeek(string) {
-    // We need to get this from the server.
-    switch (string) {
-        case "week_0":
-            return ["1 Aug", "2 Aug", "3 Aug", "4 Aug", "5 Aug", "6 Aug", "7 Aug"];
-        case "week_1":
-            return ["8 Aug", "9 Aug", "10 Aug", "11 Aug", "12 Aug", "13 Aug", "14 Aug"];
-        default:
-            return ["a", "b", "c", "d", "e", "f", "g"]
-    }
-}
-
 function getCurrentWeek() {
     // Based on the server date/time, return a string representing the current academic week.
     // e.g. "week_0", "week_7", "recess_week", "examination_week_2"
@@ -49,12 +36,19 @@ export default function MeetupScheduler() {
 
     // An array of seven strings representing the dates in the week the user is currently viewing.
     // e.g. ["1 Aug", "2 Aug" ..., "7 Aug"].
-    const [datesForWeek, setDatesForWeek] = useState(getDatesForWeek(currentWeekSelected));
+    const [datesForWeek, setDatesForWeek] = useState([]);
+
+    async function getDatesForWeek() {
+        // Fetch the dates for the week the user is currently viewing.
+        const {data, error} = await supabase.from("weeks").select("*").eq("key", currentWeekSelected);
+        console.log(JSON.stringify(data[0].value));
+        setDatesForWeek(data[0].value);
+    }
 
     const emptyUserAvailability = {   // This default value will eventually be replaced by the
         0: Array(24).fill(false),     // response from the database.
         1: Array(24).fill(false),
-        2: Array(24).fill(false),     // TODO: The nullish coalescing operator (?.[]) renders this useless.
+        2: Array(24).fill(false),
         3: Array(24).fill(false),
         4: Array(24).fill(false),
         5: Array(24).fill(false),
@@ -180,11 +174,13 @@ export default function MeetupScheduler() {
         // When the page first loads and when the week selected is changed,
         // get the user's availability and user's team's availability from the database.
         
+        getDatesForWeek().catch(console.error);
+
         fetchUserAvailability(currentWeekSelected).then(() => {
             fetchTeamMembers().then(() => {
                 calculateTeamAvailability(currentWeekSelected);
             })
-        }).catch(console.error)
+        }).catch(console.error);
 
     }, [currentWeekSelected]);
 
@@ -316,24 +312,22 @@ export default function MeetupScheduler() {
                 >
                     <MenuItem value={"week_0"}>Week 0</MenuItem>
                     <MenuItem value={"week_1"}>Week 1</MenuItem>
-                    {/* These will be included after Milestone 3.
-                        <MenuItem value = {"week_2"}>Week 2</MenuItem>
-                        <MenuItem value = {"week_3"}>Week 3</MenuItem>
-                        <MenuItem value = {"week_4"}>Week 4</MenuItem>
-                        <MenuItem value = {"week_5"}>Week 5</MenuItem>
-                        <MenuItem value = {"week_6"}>Week 6</MenuItem>
-                        <MenuItem value = {"recess_week"}>Recess Week</MenuItem>
-                        <MenuItem value = {"week_7"}>Week 7</MenuItem>
-                        <MenuItem value = {"week_8"}>Week 8</MenuItem>
-                        <MenuItem value = {"week_9"}>Week 9</MenuItem>
-                        <MenuItem value = {"week_10"}>Week 10</MenuItem>
-                        <MenuItem value = {"week_11"}>Week 11</MenuItem>
-                        <MenuItem value = {"week_12"}>Week 12</MenuItem>
-                        <MenuItem value = {"week_13"}>Week 13</MenuItem>
-                        <MenuItem value = {"reading_week"}>Reading Week</MenuItem>
-                        <MenuItem value = {"examination_week_1"}>Examination Week 1</MenuItem>
-                        <MenuItem value = {"examination_week_2"}>Examination Week 2</MenuItem>
-                    */}
+                    <MenuItem value={"week_2"}>Week 2</MenuItem>
+                    <MenuItem value={"week_3"}>Week 3</MenuItem>
+                    <MenuItem value={"week_4"}>Week 4</MenuItem>
+                    <MenuItem value={"week_5"}>Week 5</MenuItem>
+                    <MenuItem value={"week_6"}>Week 6</MenuItem>
+                    <MenuItem value={"recess_week"}>Recess Week</MenuItem>
+                    <MenuItem value={"week_7"}>Week 7</MenuItem>
+                    <MenuItem value={"week_8"}>Week 8</MenuItem>
+                    <MenuItem value={"week_9"}>Week 9</MenuItem>
+                    <MenuItem value={"week_10"}>Week 10</MenuItem>
+                    <MenuItem value={"week_11"}>Week 11</MenuItem>
+                    <MenuItem value={"week_12"}>Week 12</MenuItem>
+                    <MenuItem value={"week_13"}>Week 13</MenuItem>
+                    <MenuItem value={"reading_week"}>Reading Week</MenuItem>
+                    <MenuItem value={"examination_week_1"}>Examination Week 1</MenuItem>
+                    <MenuItem value={"examination_week_2"}>Examination Week 2</MenuItem>
                 </Select>
             </FormControl>
 
