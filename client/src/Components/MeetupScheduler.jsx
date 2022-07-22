@@ -1,24 +1,15 @@
 import { Typography } from "@mui/material";
-import { Paper } from "@mui/material";
-import { TableRow } from "@mui/material";
-import { TableBody } from "@mui/material";
-import { Checkbox } from "@mui/material";
 import { InputLabel } from "@mui/material";
 import { MenuItem } from "@mui/material";
-import { Button } from "@mui/material";
-import { TableContainer } from "@mui/material";
-import { Table } from "@mui/material";
 import { Select } from "@mui/material";
 import { FormControl } from "@mui/material";
-import { TableCell } from "@mui/material";
-import { TableHead } from "@mui/material";
 import { Box } from "@mui/material";
 import { useEffect } from "react";
 import { useState } from "react";
 import { supabase } from "../supabase";
-
-const hours = ["12 A.M.", "1 A.M.", "2 A.M.", "3 A.M.", "4 A.M.", "5 A.M.", "6 A.M.", "7 A.M.", "8 A.M.", "9 A.M.", "10 A.M.", "11 A.M.",
-    "12 P.M.", "1 P.M.", "2 P.M.", "3 P.M.", "4 P.M.", "5 P.M.", "6 P.M.", "7 P.M.", "8 P.M.", "9 P.M.", "10 P.M.", "11 P.M."]
+import SaveIcon from '@mui/icons-material/Save';
+import MeetupSchedulerTable from "./MeetupSchedulerTable.jsx";
+import { Fab } from "@mui/material"
 
 function getCurrentWeek() {
     // Based on the server date/time, return a string representing the current academic week.
@@ -157,7 +148,7 @@ export default function MeetupScheduler() {
 
             // Fetch this team member's availability for currentWeekSelected from the database.
             const response = await supabase.from('user_meetup_availability').select(currentWeekSelected).eq("id", teamMember.id);
-            const teamMemberAvailability = response.data?.[0]?.[currentWeekSelected]; // A JSON object with 6 keys and 24 boolean values per key.
+            const teamMemberAvailability = response.data?.[0]?.[currentWeekSelected]; // A JSON object with 7 keys and 24 boolean values per key.
             
             // Iterate through each day of the week.
             for (let day = 0; day < 7; day++) {
@@ -189,92 +180,10 @@ export default function MeetupScheduler() {
 
     }, [currentWeekSelected]);
 
-    function handleClickCheckbox(event) {
-
-        // Firstly, find out which checkbox was clicked.
-        const day_index = event.currentTarget.getAttribute('data-day');
-        const hour_index = event.currentTarget.getAttribute('data-hour');
-
-        // Then, make a copy of the boolean[24] for the relevant day of the week.
-        let updatedArray = [...userAvailability[day_index]];
-        updatedArray[hour_index] = event.target.checked;
-
-        // Then, make a copy of the userAvailability object.
-        let updatedObject = { ...userAvailability };
-        updatedObject[day_index] = updatedArray;
-
-        // Finally, update the JSON object userAvailability.
-        setUserAvailability(updatedObject);
-    }
-
     function handleSaveAndRefresh(week) {
         // Save the JSON object userAvailability to the database.
         saveUserAvailability(week)
             .catch(console.error);
-    }
-
-    function MeetupSchedulerTable() {
-
-        return (
-            <TableContainer component={Paper}>
-                <Table>
-                    <TableHead>
-                        <TableRow>
-                            <TableCell> Time of Day </TableCell>
-                            <TableCell align="center"> Monday       <br /> {datesForWeek[0]} </TableCell>
-                            <TableCell align="center"> Tuesday      <br /> {datesForWeek[1]} </TableCell>
-                            <TableCell align="center"> Wednesday    <br /> {datesForWeek[2]} </TableCell>
-                            <TableCell align="center"> Thursday     <br /> {datesForWeek[3]} </TableCell>
-                            <TableCell align="center"> Friday       <br /> {datesForWeek[4]} </TableCell>
-                            <TableCell align="center"> Saturday     <br /> {datesForWeek[5]} </TableCell>
-                            <TableCell align="center"> Sunday       <br /> {datesForWeek[6]} </TableCell>
-                        </TableRow>
-                    </TableHead>
-
-                    <TableBody>
-                        { // This is really ugly.
-                            Array(24)
-                                .fill(0)
-                                .map(
-                                    function (_ignore_zero_value, hour_index) { // for (hour_index in range(24)) { ...
-                                        return <TableRow key={hour_index}>
-                                            <TableCell key={0}>
-                                                {/* The cell in the 'Time of Day' column, e.g. "12 A.M.–1 A.M." */}
-                                                {hours[hour_index]}&ndash;{hours[(hour_index + 1) % 24]}
-                                            </TableCell>
-
-
-                                            {
-                                                Array(7)
-                                                    .fill(0)
-                                                    .map(
-                                                        function (_ignore_zero_value_2, day_index) { // for (day_index in range(7)) { ...
-                                                            return <TableCell key={day_index + 1}>
-                                                                <Checkbox
-                                                                    data-day={day_index}
-                                                                    data-hour={hour_index}
-                                                                    checked={userAvailability[day_index][hour_index]}
-                                                                    onClick={handleClickCheckbox}
-                                                                />
-                                                                <br />
-                                                                <Typography>
-                                                                    {
-                                                                        (userAvailability[day_index][hour_index] ? 1 : 0) // The user's availability.
-                                                                        + (teamAvailability[day_index][hour_index] ?? 0) // The number of team members who are available at this hour.
-                                                                    }/{teamMembers?.length ?? 0}
-                                                                </Typography>
-                                                            </TableCell>
-                                                        }
-                                                    )
-                                            }
-                                        </TableRow>;
-                                    }
-                                )
-                        }
-                    </TableBody>
-                </Table>
-            </TableContainer>
-        )
     }
 
     useEffect(() => {
@@ -306,7 +215,7 @@ export default function MeetupScheduler() {
                 Meetup Scheduler
             </Typography>
 
-            <FormControl sx={{ pb: 2 }}>
+            <FormControl sx={{ pb: 2 }} display="block">
                 <InputLabel id="week-selector">Week</InputLabel>
                 <Select
                     id="week-selector"
@@ -336,15 +245,26 @@ export default function MeetupScheduler() {
                 </Select>
             </FormControl>
 
-            <MeetupSchedulerTable />
+            <MeetupSchedulerTable
+                teamMembers={teamMembers}
+                userAvailability={userAvailability}
+                setUserAvailability={setUserAvailability}
+                teamAvailability={teamAvailability}
+                datesForWeek={datesForWeek}
+            />
 
-            <Button
-                variant="contained"
-                sx={{ my: 2 }}
-                onClick={() => { handleSaveAndRefresh(currentWeekSelected); }}
+            <Fab
+                color="primary"
+                aria-label="save"
+                onClick={() => handleSaveAndRefresh(currentWeekSelected)}
+                style={{
+                    position: 'fixed',
+                    bottom: '2rem',
+                    right: '2rem',
+                }}
             >
-                Save and Refresh
-            </Button>
+                <SaveIcon />
+            </Fab>
         </Box>
     );
 }
