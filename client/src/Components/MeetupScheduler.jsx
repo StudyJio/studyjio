@@ -62,7 +62,7 @@ export default function MeetupScheduler() {
     // A JSON object with 7 keys. Each value is an array of 24 integers.
     const [teamAvailability, setTeamAvailability] = useState(emptyTeamAvailability)
 
-    const user = supabase.auth.user();
+    const user = supabase?.auth?.user();
 
     async function fetchUserAvailability(week) {
 
@@ -104,7 +104,7 @@ export default function MeetupScheduler() {
     async function fetchTeamMembers() {
         // Determine the team_id of the user.
         const user = supabase.auth.user();
-        let response = await supabase.from('user_profiles').select('team_id').eq('id', user.id);
+        let response = await supabase.from('user_profiles').select('team_id').eq('id', user?.id);
         let teamID = response.data[0].team_id ?? null;
 
         console.log("In fetchTeamMembers, teamID is: ", teamID);
@@ -194,7 +194,6 @@ export default function MeetupScheduler() {
         setCurrentWeekSelected(e.target.value);
     }
 
-    // If the user is not in a team, show a message.
     if (teamMembers.length === 0) {
         return (
             <Box>
@@ -202,7 +201,7 @@ export default function MeetupScheduler() {
                     Meetup Scheduler
                 </Typography>
 
-                <Typography py={3}>
+                <Typography variant="paragraph" gutterBottom>
                     You are not a member of any team.
                 </Typography>
             </Box>
@@ -256,6 +255,7 @@ export default function MeetupScheduler() {
             <Fab
                 color="primary"
                 aria-label="save"
+                data-testid="save-button"
                 onClick={() => handleSaveAndRefresh(currentWeekSelected)}
                 style={{
                     position: 'fixed',

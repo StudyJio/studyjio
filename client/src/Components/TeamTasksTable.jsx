@@ -90,7 +90,6 @@ export default function TeamTasksTable(props) {
                             <TableRow>
                                 <TableCell> Task Name </TableCell>
                                 <TableCell> Week </TableCell>
-
                                 { /* Display a column (of checkboxes) for each team member. */
                                     teamMembers.map((member, index) => {
                                         return (
@@ -119,7 +118,7 @@ export default function TeamTasksTable(props) {
                                                             <Checkbox
                                                                 disabled={
                                                                     // Do not let the user complete tasks on behalf of other team members.
-                                                                    member.id !== supabase.auth.user().id
+                                                                    member.id !== supabase?.auth?.user()?.id
                                                                 }
                                                                 checked={task.completion[member.id] ?? false}
                                                                 onChange={event => {
@@ -138,6 +137,7 @@ export default function TeamTasksTable(props) {
                                             <TableCell>
                                                 <EditRoundedIcon
                                                     aria-label="edit"
+                                                    data-testid="edit-task-button"
                                                     onClick={() => {
                                                         setIndexOfTaskToModify(taskIndex);
                                                         setEditDialogOpen(true);
@@ -149,6 +149,7 @@ export default function TeamTasksTable(props) {
                                             <TableCell>
                                                 <DeleteRoundedIcon
                                                     aria-label="delete"
+                                                    data-testid="delete-task-button"
                                                     onClick={() => {
                                                         setIndexOfTaskToModify(taskIndex);
                                                         setDeleteDialogOpen(true);
