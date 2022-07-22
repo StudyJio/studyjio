@@ -89,9 +89,7 @@ export default function TeamTasks() {
 
             <TeamTasksTable
                 teamMembers={teamMembers}
-                setTeamMembers={setTeamMembers}
                 tasks={tasks}
-                setTasks={setTasks}
                 getTasks={getTasks}
             />
 

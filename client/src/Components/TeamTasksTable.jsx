@@ -19,7 +19,7 @@ import { Dialog, DialogActions, DialogContent, DialogTitle, TextField, DialogCon
 
 export default function TeamTasksTable(props) {
 
-    const { teamMembers, setTeamMembers, tasks, setTasks, getTasks } = props;
+    const { teamMembers, tasks, getTasks } = props;
 
     // States to keep track of whether the dialogs are open.
     const [editDialogOpen, setEditDialogOpen] = useState(false); // Whether the edit dialog is open.
