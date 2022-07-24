@@ -37,6 +37,7 @@ function Header(props) {
                     startIcon={<LogoutIcon />}
                     onClick={handleSignOut}
                     sx={{ color: 'white' }}
+                    data-cy="sign-out-button"
                 >
                     Sign Out
                 </Button>

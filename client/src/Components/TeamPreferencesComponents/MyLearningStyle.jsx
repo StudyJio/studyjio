@@ -17,6 +17,7 @@ export default function MyLearningStyle(props) {
         return (
             <Box sx={{mx: 4, my: 2}}>
                 <Slider
+                    data-cy={`my-learning-style-slider-${leftLabel}-${rightLabel}`}
                     defaultValue={1}
                     step={2}
                     marks={marks}

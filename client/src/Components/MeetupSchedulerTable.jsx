@@ -46,8 +46,13 @@ export default function MeetupSchedulerTable(props) {
 
                                 { days.map((day, dayIndex) => {
                                     return (
-                                        <TableCell key={dayIndex + 1} align="center">
+                                        <TableCell
+                                            data-cy={`meetup-scheduler-table-cell-${dayIndex}-${hourIndex}`}
+                                            key={dayIndex + 1}
+                                            align="center"
+                                        >
                                             <Checkbox
+                                                data-cy={`meetup-scheduler-checkbox-${dayIndex}-${hourIndex}`}
                                                 checked={userAvailability[dayIndex][hourIndex]}
                                                 onClick={event => {
                                                     const newUserAvailability = {...userAvailability};
@@ -56,7 +61,9 @@ export default function MeetupSchedulerTable(props) {
                                                 }}
                                             />
                                             <br />
-                                            <Typography>
+                                            <Typography
+                                                data-cy={`meetup-scheduler-checkbox-label-${dayIndex}-${hourIndex}`}
+                                            >
                                                 {
                                                     // The user's availability for this hour on this day.
                                                     (userAvailability[dayIndex][hourIndex] ? 1 : 0)

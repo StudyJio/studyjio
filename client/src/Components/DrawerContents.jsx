@@ -14,21 +14,27 @@ function DrawerContents(props) {
             
             <List>
                 <ListItem key={"My Team Members"} onClick={() => props.setActivePageName("My Team Members")}>
-                    <ListItemButton>
+                    <ListItemButton
+                        data-cy="my-team-members-button"    
+                    >
                         <ListItemIcon> <GroupsRoundedIcon /> </ListItemIcon>
                         <ListItemText primary="My Team Members" />
                     </ListItemButton>
                 </ListItem>
 
                 <ListItem key={"My Team's Tasks"} onClick={() => props.setActivePageName("My Team's Tasks")}>
-                    <ListItemButton>
+                    <ListItemButton
+                        data-cy="my-team-tasks-button"
+                    >
                         <ListItemIcon> <AssignmentRoundedIcon /> </ListItemIcon>
                         <ListItemText primary="My Team's Tasks" />
                     </ListItemButton>
                 </ListItem>
 
                 <ListItem key={"Meetup Scheduler"} onClick={() => props.setActivePageName("Meetup Scheduler")}>
-                    <ListItemButton>
+                    <ListItemButton
+                        data-cy="meetup-scheduler-button"
+                    >
                         <ListItemIcon> <CalendarMonthRoundedIcon /> </ListItemIcon>
                         <ListItemText primary="Meetup Scheduler" />
                     </ListItemButton>
@@ -37,7 +43,9 @@ function DrawerContents(props) {
                 <Divider />
 
                 <ListItem key={"Team Preferences"} onClick={() => props.setActivePageName("Team Preferences")}>
-                    <ListItemButton>
+                    <ListItemButton
+                        data-cy="team-preferences-button"
+                    >
                         <ListItemIcon> <PsychologyRoundedIcon /> </ListItemIcon>
                         <ListItemText primary="Team Preferences" />
                     </ListItemButton>
@@ -46,7 +54,9 @@ function DrawerContents(props) {
                 <Divider />
 
                 <ListItem key={"My Account"} onClick={() => props.setActivePageName("My Account")}>
-                    <ListItemButton>
+                    <ListItemButton
+                        data-cy="my-account-button"
+                    >
                         <ListItemIcon> <AccountCircleRoundedIcon /> </ListItemIcon>
                         <ListItemText primary="My Account" />
                     </ListItemButton>

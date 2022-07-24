@@ -116,6 +116,7 @@ export default function TeamTasksTable(props) {
                                                     return (
                                                         <TableCell align="center" key={memberIndex}>
                                                             <Checkbox
+                                                                data-cy="task-checkbox"
                                                                 disabled={
                                                                     // Do not let the user complete tasks on behalf of other team members.
                                                                     member.id !== supabase?.auth?.user()?.id
@@ -137,6 +138,7 @@ export default function TeamTasksTable(props) {
                                             <TableCell>
                                                 <EditRoundedIcon
                                                     aria-label="edit"
+                                                    data-cy="edit-task-button"
                                                     data-testid="edit-task-button"
                                                     onClick={() => {
                                                         setIndexOfTaskToModify(taskIndex);
@@ -149,6 +151,7 @@ export default function TeamTasksTable(props) {
                                             <TableCell>
                                                 <DeleteRoundedIcon
                                                     aria-label="delete"
+                                                    data-cy="delete-task-button"
                                                     data-testid="delete-task-button"
                                                     onClick={() => {
                                                         setIndexOfTaskToModify(taskIndex);
@@ -168,6 +171,7 @@ export default function TeamTasksTable(props) {
 
                 <Fab
                     color="primary"
+                    data-cy="create-task-button"
                     aria-label="add"
                     sx={{ my: 2 }}
                     onClick={() => {
@@ -183,6 +187,7 @@ export default function TeamTasksTable(props) {
                     <DialogTitle>Edit Task</DialogTitle>
                     <DialogContent>
                         <TextField
+                            data-cy="edit-task-name-input"
                             autoFocus
                             id="name"
                             label="Task Name"
@@ -192,6 +197,7 @@ export default function TeamTasksTable(props) {
                             onChange={event => setNewTaskName(event.target.value)}
                         />
                         <TextField
+                            data-cy="edit-task-week-input"
                             id="week"
                             label="Week"
                             type="text"
@@ -201,10 +207,18 @@ export default function TeamTasksTable(props) {
                         />
                     </DialogContent>
                     <DialogActions>
-                        <Button onClick={() => { setEditDialogOpen(false); }} color="primary">
+                        <Button
+                            onClick={() => { setEditDialogOpen(false); }}
+                            color="primary"
+                            data-cy="edit-task-cancel-button"
+                        >
                             Cancel
                         </Button>
-                        <Button onClick={handleConfirmEdit} color="primary">
+                        <Button
+                            onClick={handleConfirmEdit}
+                            color="primary"
+                            data-cy="edit-task-confirm-button"    
+                        >
                             Save
                         </Button>
                     </DialogActions>
@@ -218,10 +232,18 @@ export default function TeamTasksTable(props) {
                         </DialogContentText>
                     </DialogContent>
                     <DialogActions>
-                        <Button onClick={() => { setDeleteDialogOpen(false); }} color="primary">
+                        <Button
+                            onClick={() => { setDeleteDialogOpen(false); }}
+                            color="primary"
+                            data-cy="delete-task-cancel-button"
+                        >
                             Cancel
                         </Button>
-                        <Button onClick={handleConfirmDelete} color="primary">
+                        <Button
+                            onClick={handleConfirmDelete}
+                            color="primary"
+                            data-cy="delete-task-confirm-button"
+                        >
                             Delete
                         </Button>
                     </DialogActions>
@@ -231,6 +253,7 @@ export default function TeamTasksTable(props) {
                     <DialogTitle>Create Task</DialogTitle>
                     <DialogContent>
                         <TextField
+                            data-cy="create-task-name-input"
                             autoFocus
                             id="name"
                             label="Task Name"
@@ -240,6 +263,7 @@ export default function TeamTasksTable(props) {
                             onChange={event => setNewTaskName(event.target.value)}
                         />
                         <TextField
+                            data-cy="create-task-week-input"
                             id="week"
                             label="Week"
                             type="text"
@@ -249,10 +273,18 @@ export default function TeamTasksTable(props) {
                         />
                     </DialogContent>
                     <DialogActions>
-                        <Button onClick={() => { setCreateDialogOpen(false); }} color="primary">
+                        <Button
+                            onClick={() => { setCreateDialogOpen(false); }}
+                            color="primary"
+                            data-cy="create-task-cancel-button"
+                        >
                             Cancel
                         </Button>
-                        <Button onClick={handleConfirmCreate} color="primary">
+                        <Button
+                            onClick={handleConfirmCreate}
+                            color="primary"
+                            data-cy="create-task-confirm-button"
+                        >
                             Create
                         </Button>
                     </DialogActions>

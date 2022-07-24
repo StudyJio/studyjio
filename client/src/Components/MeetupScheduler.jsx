@@ -217,6 +217,7 @@ export default function MeetupScheduler() {
             <FormControl sx={{ pb: 2 }} display="block">
                 <InputLabel id="week-selector">Week</InputLabel>
                 <Select
+                    data-cy="meetup-scheduler-week-selector"
                     id="week-selector"
                     value={currentWeekSelected}
                     label="Week"
