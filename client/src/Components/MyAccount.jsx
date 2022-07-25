@@ -85,6 +85,11 @@ export default function MyAccount() {
 
   
   const usernameInputRef = useRef();
+  // const emailInputRef = useRef();
+  // const oldPasswordInputRef = useRef();
+  // const newPasswordInputRef = useRef();
+  // const confirmNewPasswordInputRef = useRef();
+
   // Save username changes to Supabase upon clicking "Save Changes"
   const saveUsernameHandler = async (event) => {
     event.preventDefault();
@@ -105,6 +110,29 @@ export default function MyAccount() {
     });
   };
 
+  // const resetPasswordHandler = async (event) => {
+  //   event.preventDefault();
+
+  //   // const oldPassword = oldPasswordInputRef.current.value
+  //   const email = emailInputRef.current.value;
+  //   const newPassword = newPasswordInputRef.current.value;
+  //   const confirmNewPassword = confirmNewPasswordInputRef.current.value;
+
+  //   console.log(user.id);
+
+  //   // if (user.encrypted_password !== bcrypt(oldPassword, supabase.auth.users.encrypted_password)) {
+  //   if (user.email !== email) {
+  //     console.log("Invalid Email!");
+  //   } else {
+  //     console.log("Success!");
+  //     if (newPassword === confirmNewPassword) {
+  //       const { user, error } = await supabase.auth.update({
+  //         password: { newPassword },
+  //       });
+  //     }
+  //   }
+  // };
+
   // When the profile picture is clicked, ...
   function handleClickProfilePicture(event) {
     setAnchorEl(event.currentTarget);
@@ -117,9 +145,6 @@ export default function MyAccount() {
   function handleClickRemovePicture() {
     // TODO: Delete the user's current profile picture from the database.
     //       (Ensure that the the default profile picture is now displayed.)
-    const { data } = await supabase.storage
-      .from("avatars")
-      .remove([`public/${user.id}.png`]);
 
     // Close the popover menu.
     handleCloseProfilePictureMenu();
@@ -132,7 +157,7 @@ export default function MyAccount() {
   const [selectedFile, setSelectedFile] = useState(); // Eventually contains the new picture.
   const [isFilePicked, setIsFilePicked] = useState(false); // Remove if not needed, probably.
 
-  async function handleChangeProfilePicture(event) {
+  function handleChangeProfilePicture(event) {
     console.log("The function handleChangeProfilePicture was called.");
 
     // Set `selectedFile` to the selected file, and record that the file is picked.
@@ -140,21 +165,6 @@ export default function MyAccount() {
     setIsFilePicked(true);
 
     // TODO: Save the image to the database.
-    const avatarFile = event.target.files[0];
-    const { data: uploadedData } = await supabase.storage
-      .from("avatars")
-      .upload(`public/${user.id}.png`, avatarFile, {
-        cacheControl: "3600",
-        upsert: false,
-      });
-
-    const { data: updatedData } = await supabase.storage
-      .from("avatars")
-      .update(`public/${user.id}.png`, avatarFile, {
-        cacheControl: "3600",
-        upsert: false,
-      });
-
     handleSubmission();
   }
 
@@ -187,10 +197,6 @@ export default function MyAccount() {
       });
   }
 
-  const { publicURL } = supabase.storage
-    .from("avatars")
-    .getPublicUrl(`public/${user.id}.png`);
-
   /**
    * Return statement ===========================================================================
    */
@@ -203,7 +209,7 @@ export default function MyAccount() {
         <form onSubmit={handleSaveProfileChanges}>
           <Box display="flex" justifyContent="center">
             <Avatar
-              src={publicURL}
+              // src= TODO: Get the user's profile picture from Supabase.
               style={{ width: 150, height: 150 }}
               onClick={handleClickProfilePicture}
             />
@@ -247,6 +253,9 @@ export default function MyAccount() {
               >
                 Remove photo
               </Button>
+              <Typography sx={{m: 1}}>
+              We have not yet implemented writing and reading profile pictures to and from our database.
+          </Typography>
             </Popover>
           </Box>
           
@@ -282,12 +291,14 @@ export default function MyAccount() {
       </Paper>
 
       <Paper sx={{ my: 2, p: 2, width: 300 }}>
+        {/* <form onSubmit={resetPasswordHandler}> */}
         <Typography variant="h5" sx={{ mb: 2 }}>
           {" "}
           Change Password{" "}
         </Typography>
 
         <TextField
+          // inputRef={oldPasswordInputRef}
           label="Current Password"
           type="password"
           fullWidth
@@ -295,6 +306,7 @@ export default function MyAccount() {
         />
 
         <TextField
+          // inputRef={newPasswordInputRef}
           label="New Password"
           type="password"
           fullWidth
@@ -302,6 +314,7 @@ export default function MyAccount() {
         />
 
         <TextField
+          // inputRef={confirmNewPasswordInputRef}
           label="Confirm New Password"
           type="password"
           fullWidth
